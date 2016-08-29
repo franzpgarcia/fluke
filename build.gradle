@@ -1,0 +1,47 @@
+apply plugin: 'eclipse'
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+	maven { url 'http://dl.bintray.com/gesellix/docker-utils' }
+}
+
+dependencies {
+	compile 'org.slf4j:slf4j-nop:1.7.21'
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+	compile 'org.reflections:reflections:0.9.10'
+	compile 'de.gesellix:docker-client:2016-07-23T22-43-10'
+	compile 'org.apache.commons:commons-compress:1.3'
+	compile 'commons-cli:commons-cli:1.3.1'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+	main {
+		groovy {
+			srcDirs = ['src/main/groovy']
+		}
+	}
+
+	test {
+		groovy {
+			srcDirs = ['src/test/groovy']
+		}
+	}
+}
+
+task runApp (type: JavaExec) {
+	main = 'fluke.App'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Implementation-Title': 'Fluke',
+			'Implementation-Version': '0.1',
+			'Main-Class': 'fluke.App'
+	}
+	baseName = "fluke"
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}

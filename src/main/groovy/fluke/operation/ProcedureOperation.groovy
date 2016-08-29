@@ -1,0 +1,32 @@
+package fluke.operation;
+
+import groovy.lang.Closure;
+
+import java.io.InputStream;
+import java.util.Map;
+
+import fluke.annotation.Operation;
+import fluke.annotation.OperationMethod;
+import fluke.block.ProcedureBlock;
+import fluke.execution.ExecutionContext;
+
+@Operation("procedure")
+class ProcedureOperation {
+	private ExecutionContext executionContext
+	
+	ProcedureOperation(ExecutionContext executionContext) {
+		this.executionContext = executionContext
+	}
+	
+	@OperationMethod
+	def procedure(String procedure, Closure closure) {
+		this.executionContext.procedures[procedure] = new ProcedureBlock(executionContext: this.executionContext.copy(), block: closure)
+	}
+	
+	@OperationMethod
+	def procedure(Map<String, Closure> procedures) {
+		procedures.each {
+			k, v -> this.procedure(k, v)
+		}
+	}
+}
