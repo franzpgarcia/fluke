@@ -19,8 +19,8 @@ class SetEnvOperation {
 	def setenv(Map<String, String> envs) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("ADDING ENVIRONMENT VARIABLES ${env}"),
-							Env: env.collect {k, v -> "${k}=${v}"}]
+		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("ADDING ENVIRONMENT VARIABLES ${envs}"),
+							Env: envs.collect {k, v -> "${k}=${v}"}]
 		
 		println "Setting environment variables ${envs}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
