@@ -21,7 +21,7 @@ class ApplyOperation {
 		applyScript(apply)
 	}
 	
-	private void applyBuild(Map<String, Object> apply) {
+	private void applyBuild(Map apply) {
 		String procedure = apply["procedure"]
 		if(procedure) {
 			ProcedureBlock procedureBlock = this.executionContext.procedures[procedure]

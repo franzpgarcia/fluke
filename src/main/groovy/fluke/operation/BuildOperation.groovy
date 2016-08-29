@@ -15,14 +15,16 @@ class BuildOperation {
 	}
 
 	@OperationMethod
-	def build(Map<String, String> build) {
+	def build(Map build) {
+		Map variables = this.executionContext.variables
 		String image = build["image"]
-		if(image) {
+		if(image && !variables.disableBuilds) {
 			ImageBlock imageBlock = this.executionContext.images[image]
 			if(imageBlock) {
 				println "Building image ${image}"
 				imageBlock.eval()
 			} else {
+				println "Image ${image} not found"
 				//TODO throw exception
 			}
 		}

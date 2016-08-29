@@ -33,6 +33,7 @@ class ImageBlock implements ExecutableBlock {
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)		
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		
+		println "Committing final image"
 		imageContext["maintainer"] = blockVars.maintainer
 		imageContext["labels"] = blockVars.labels
 		def commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
