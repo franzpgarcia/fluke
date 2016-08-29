@@ -23,6 +23,7 @@ class BuildOperation {
 			if(imageBlock) {
 				println "Building image ${image}"
 				imageBlock.eval()
+				println "Build ${image} completed successfully"
 			} else {
 				println "Image ${image} not found"
 				//TODO throw exception
