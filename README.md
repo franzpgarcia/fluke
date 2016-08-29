@@ -10,11 +10,11 @@ procedure adddirectory: {
 }
 	
 image custom_ubuntu: {
-	maintainer = "Franz Garcia"
-	labels = ["version": "0.1"]
-	onstart entrypoint: "/home/test.sh", parameters: ["-d", "/home/test"]
 	from image: "ubuntu"
 
+	maintainer = "Franz Garcia"
+	labels = ["version": "0.1"]
+	
 	apply procedure: "adddirectory"
 	apply procedure: {
 		run shell, "mkdir", "/blah1"
@@ -24,6 +24,8 @@ image custom_ubuntu: {
 		port 22
 	}
 	volume "~/bla"
+	
+	onstart entrypoint: "/home/test.sh", parameters: ["-d", "/home/test"]
 }
 
 build image: "custom_ubuntu"
