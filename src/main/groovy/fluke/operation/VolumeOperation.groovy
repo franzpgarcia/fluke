@@ -5,11 +5,12 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Operation("volume")
-class VolumeOperation {
+class VolumeOperation implements ConsoleOutputGenerator {
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 	
@@ -29,11 +30,11 @@ class VolumeOperation {
 		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("ADDING VOLUME ${volumes}"), 
 						   Volumes: volumes.collectEntries {[(it): [:]]}]
 		
-		println "Adding volumes ${volumes}"
+		printMessage "Adding volumes ${volumes}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(containerResponse.id, commitQuery, true).imageId
-		println "=> ${imageContext.currentImageId}"
+		printCommit imageContext.currentImageId
 	}
 	
 }

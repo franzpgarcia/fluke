@@ -11,11 +11,12 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Operation("run")
-class RunOperation {
+class RunOperation implements ConsoleOutputGenerator {
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 	
@@ -39,11 +40,11 @@ class RunOperation {
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
 		containerConfig << [Cmd: args]
 		
-		println "Running command ${args}"
+		printMessage "Running command ${args}"
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(runResponse.containerId, commitQuery, true).imageId
-		println "=> ${imageContext.currentImageId}"
+		printCommit imageContext.currentImageId
 	}
 	
 }

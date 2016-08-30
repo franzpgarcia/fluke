@@ -3,11 +3,12 @@ package fluke.operation;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.ImageBlock;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("build")
-class BuildOperation {
+class BuildOperation implements ConsoleOutputGenerator {
 	
 	private ExecutionContext executionContext
 	
@@ -22,12 +23,12 @@ class BuildOperation {
 		if(image && !variables.disableBuilds) {
 			ImageBlock imageBlock = this.executionContext.images[image]
 			if(imageBlock) {
-				println "------ Building image ${image} -------"
+				printMessage "\n------ Building image ${image} -------"
 				try {
 					imageBlock.eval(this.executionContext)
-					println "Build of image ${image} completed successfully"
+					printMessage "Build of image ${image} completed successfully\n"
 				} catch(Exception e) {
-					println "Build of image ${image} failed"
+					printMessage "Build of image ${image} failed\n"
 					throw e
 				}
 			} else {

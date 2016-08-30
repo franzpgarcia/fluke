@@ -10,12 +10,13 @@ import fluke.annotation.AllowedOperations;
 import fluke.annotation.Block;
 import fluke.api.DockerApi;
 import fluke.block.ProcedureBlock;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Block(of="image")
 @AllowedOperations(["procedure", "from", "apply", "volume", "port", "onstart", "port", "setenv"])
-class ImageBlock implements ExecutableBlock {
+class ImageBlock implements ExecutableBlock, ConsoleOutputGenerator {
 	String image
 	String maintainer
 	Map<String, String> labels
@@ -35,8 +36,7 @@ class ImageBlock implements ExecutableBlock {
 		Map containerConfig = HelperFunctions.buildContainerConfig(executionContext)		
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		
-		println "Committing final image."
-		println "Maintainer=${blockVars.maintainer}, Labels=${blockVars.labels}"
+		printMessage "Committing final image. Maintainer=${blockVars.maintainer}, Labels=${blockVars.labels}"
 		imageContext["maintainer"] = blockVars.maintainer
 		def commitQuery = HelperFunctions.buildCommitQuery(executionContext)
 		def commitConfig =[Entrypoint: imageContext.onstart?.entrypoint,
@@ -46,7 +46,7 @@ class ImageBlock implements ExecutableBlock {
 						   Labels: blockVars.labels]
 		
 		imageContext.currentImageId = dockerApi.commit(containerResponse.id, commitQuery, commitConfig, true).imageId
-		println "=> ${imageContext.currentImageId}"
+		printCommit imageContext.currentImageId
 	}
 	
 }

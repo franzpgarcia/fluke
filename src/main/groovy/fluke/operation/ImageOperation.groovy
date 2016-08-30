@@ -6,13 +6,14 @@ import java.util.Map;
 
 import fluke.block.ExecutableBlock;
 import fluke.block.ImageBlock;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.execution.ExecutionContext;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.operation.FromOperation;
 
 @Operation("image")
-class ImageOperation {
+class ImageOperation implements ConsoleOutputGenerator {
 	private ExecutionContext executionContext
 	
 	ImageOperation(ExecutionContext executionContext) {

@@ -5,11 +5,12 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("from")
-class FromOperation {
+class FromOperation implements ConsoleOutputGenerator {
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 
@@ -31,9 +32,9 @@ class FromOperation {
 			throw new OperationException("Duplicate `from` operation call in image \"${imageContext.image}\"")
 		}
 
-		println "Pulling ${imageMap.image}:${imageMap.tag}"
+		printMessage "Pulling ${imageMap.image}:${imageMap.tag}"
 		def pullResponse = dockerApi.pull(imageMap.image, imageMap.tag)
 		imageContext.currentImageId = pullResponse.id
-		println "=> ${imageContext.currentImageId}"
+		printCommit imageContext.currentImageId
 	}
 }

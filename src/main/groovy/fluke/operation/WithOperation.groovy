@@ -3,10 +3,11 @@ package fluke.operation
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.WithBlock;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.execution.ExecutionContext;
 
 @Operation("with")
-class WithOperation {
+class WithOperation implements ConsoleOutputGenerator {
 
 	private ExecutionContext executionContext
 	

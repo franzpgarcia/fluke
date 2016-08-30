@@ -33,8 +33,10 @@ class ScriptRunner {
 	private void handleExecutionException(Exception e, String scriptStr, String scriptName) {
 		StackTraceElement lineElement = e.stackTrace.find { it.className.contains scriptName }
 		if(lineElement) {
+			println ""
 			int lineIssue = lineElement.lineNumber
-			printErr "Error has occurred at line ${lineIssue}: ${e.message}"
+			printErr "Error has occurred at line ${lineIssue}:"
+			printErr "\t${e.message}\n"
 			int startLine = Math.max(0, lineElement.lineNumber - 2)
 			int finalLine = Math.min(lineElement.lineNumber + 4, scriptStr.length() -1)
 			int curLine = startLine + 1

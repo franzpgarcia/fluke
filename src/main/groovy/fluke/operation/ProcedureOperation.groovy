@@ -8,10 +8,11 @@ import java.util.Map;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.ProcedureBlock;
+import fluke.common.ConsoleOutputGenerator;
 import fluke.execution.ExecutionContext;
 
 @Operation("procedure")
-class ProcedureOperation {
+class ProcedureOperation implements ConsoleOutputGenerator {
 	private ExecutionContext executionContext
 	
 	ProcedureOperation(ExecutionContext executionContext) {
