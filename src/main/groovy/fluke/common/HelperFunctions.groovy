@@ -35,9 +35,8 @@ final class HelperFunctions {
 		Map imageContext = variables.imageContext
 		
 		String image = imageContext.image
-		int buildNumber = imageContext.buildNumber
 		String tag = imageContext.tag
 		String author = imageContext.maintainer
-		return [repo: "${image}-${buildNumber}", tag: tag, author: author]
+		return [repo: image, tag: tag, author: author]
 	}
 }
