@@ -1,8 +1,19 @@
 # Fluke
 Docker build automation tool written in groovy
 
-# Example of build file
+# Usage
 ```
+usage: fluke [options] <file>
+Options
+ -A,--build-arg <arg=value>   add build arguments
+    --build <image>           build a specific image
+    --help                    display this help
+    --verbose                 run in verbose mode
+    --version                 output version
+```
+
+# Example of build file
+```groovy
 procedure adddirectory: {
   with user: root {
     run shell, "mkdir", "/home/test"
@@ -30,3 +41,7 @@ image custom_ubuntu: {
 
 build image: "custom_ubuntu"
 ```
+
+# License
+
+This project is licensed under the terms of the MIT license.
