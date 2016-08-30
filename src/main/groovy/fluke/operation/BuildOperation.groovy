@@ -23,8 +23,13 @@ class BuildOperation {
 			ImageBlock imageBlock = this.executionContext.images[image]
 			if(imageBlock) {
 				println "------ Building image ${image} -------"
-				imageBlock.eval(this.executionContext)
-				println "Build ${image} completed successfully"
+				try {
+					imageBlock.eval(this.executionContext)
+					println "Build of image ${image} completed successfully"
+				} catch(Exception e) {
+					println "Build of image ${image} failed"
+					throw e
+				}
 			} else {
 				throw new OperationException("Image ${image} not defined")
 			}
