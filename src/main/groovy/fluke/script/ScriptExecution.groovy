@@ -11,7 +11,7 @@ class ScriptExecution implements Execution, BuiltInFunctions {
 
 	ExecutionContext executionContext = new ExecutionContext()
 	OperationMap operationMap = {
-		new OperationMap(owner.getClass().getAnnotation(AllowedOperations.class).value())
+		new OperationMap(null, owner.getClass().getAnnotation(AllowedOperations.class).value())
 	}()
 	
 	def disableBuilds() {

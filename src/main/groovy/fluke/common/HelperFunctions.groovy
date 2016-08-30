@@ -1,5 +1,6 @@
 package fluke.common
 
+import fluke.exception.OperationException
 import fluke.execution.ExecutionContext;
 
 final class HelperFunctions {
@@ -19,7 +20,7 @@ final class HelperFunctions {
 		String user = executionContext.variables["currentUser"]
 		String directory = executionContext.variables["currentDirectory"]
 		if(!currentImageId) {
-			//TODO throw error
+			throw new OperationException("Unable to proceed with build because of missing `from image`")
 		}
 		return [Image: currentImageId,
 				User: user,

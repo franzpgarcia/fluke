@@ -5,32 +5,35 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
+import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("from")
 class FromOperation {
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
-	
+
 	FromOperation(ExecutionContext executionContext) {
 		this.executionContext = executionContext
 	}
-	
+
 	@OperationMethod
 	def from(String image) {
 		this.from([image: image, tag: "latest"])
 	}
-	
+
 	@OperationMethod
 	def from(Map<String, Object> imageMap) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		imageMap.tag = imageMap.tag?:"latest"
-		
-		//TODO validation
+
+		if(imageContext.currentImageId) {
+			throw new OperationException("Duplicate `from` operation call in image \"${imageContext.image}\"")
+		}
+
 		println "Pulling ${imageMap.image}:${imageMap.tag}"
 		def pullResponse = dockerApi.pull(imageMap.image, imageMap.tag)
 		imageContext.currentImageId = pullResponse.id
-		println "=> ${imageContext.currentImageId}" 
+		println "=> ${imageContext.currentImageId}"
 	}
-	
 }

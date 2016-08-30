@@ -13,9 +13,11 @@ class OperationMap {
 		operationClasses = reflections.getTypesAnnotatedWith Operation.class
 	}
 	
+	private String blockName
 	private Set<String> activeOperations
 	
-	OperationMap(String[] activeOperations) {
+	OperationMap(String blockName, String[] activeOperations) {
+		this.blockName = blockName
 		this.activeOperations = new HashSet<String>(Arrays.asList(activeOperations))
 	}
 	
@@ -31,7 +33,7 @@ class OperationMap {
 			if(name in this.activeOperations) {
 				return opClass
 			} else {
-				throw new InvalidOperationCallException()
+				throw new InvalidOperationCallException(name, this.blockName)
 			}
 		}
 		return null;

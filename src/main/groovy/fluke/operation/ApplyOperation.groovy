@@ -4,6 +4,7 @@ import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.ProcedureBlock;
 import fluke.block.ImageBlock;
+import fluke.exception.NotImplementedYetException;
 import fluke.execution.ExecutionContext;
 
 @Operation("apply")
@@ -22,11 +23,16 @@ class ApplyOperation {
 	}
 	
 	private void applyBuild(Map apply) {
-		String procedure = apply["procedure"]
+		def procedure = apply["procedure"]
 		if(procedure) {
-			ProcedureBlock procedureBlock = this.executionContext.procedures[procedure]
+			ProcedureBlock procedureBlock
+			if(procedure in String) {
+				procedureBlock = this.executionContext.procedures[procedure]
+			} else if(procedure in Closure){
+				procedureBlock = new ProcedureBlock(block: procedure)
+			}
 			if(procedureBlock) {
-				procedureBlock.eval()
+				procedureBlock.eval(this.executionContext)
 			} else {
 				//TODO throw exception
 			}
@@ -36,11 +42,12 @@ class ApplyOperation {
 	private void applyScript(Map<String, Object> apply) {
 		def script = apply["script"]
 		if(script) {
-			if(script in String) {
+			throw new NotImplementedYetException()
+			/*if(script in String) {
 				
 			} else if(script in InputStream) {
 			
-			}
+			}*/
 		}
 	}
 	

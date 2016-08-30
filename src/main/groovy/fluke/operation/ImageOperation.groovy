@@ -21,7 +21,7 @@ class ImageOperation {
 	
 	@OperationMethod
 	def image(String image, Closure closure) {
-		this.executionContext.images[image] = new ImageBlock(image: image, executionContext: this.executionContext.copy(), block: closure)
+		this.executionContext.images[image] = new ImageBlock(image: image, block: closure)
 	}
 	
 	@OperationMethod

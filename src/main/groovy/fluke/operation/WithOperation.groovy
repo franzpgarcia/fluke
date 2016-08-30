@@ -22,8 +22,8 @@ class WithOperation {
 	
 	@OperationMethod
 	def with(Map<String, String> useMap, Closure closure) {
-		WithBlock withBlock = new WithBlock(executionContext: executionContext, block: closure, user: useMap.user, directory: useMap.directory)
-		withBlock.eval()
+		WithBlock withBlock = new WithBlock(block: closure, user: useMap.user, directory: useMap.directory)
+		withBlock.eval(this.executionContext)
 	}
 	
 	private void withUser(String user) {

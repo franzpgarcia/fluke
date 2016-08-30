@@ -7,11 +7,13 @@ import java.util.Map;
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.AllowedOperations;
+import fluke.annotation.Block;
 import fluke.api.DockerApi;
 import fluke.block.ProcedureBlock;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
+@Block(of="image")
 @AllowedOperations(["procedure", "from", "apply", "volume", "port", "onstart", "port", "setenv"])
 class ImageBlock implements ExecutableBlock {
 	String image
@@ -21,22 +23,22 @@ class ImageBlock implements ExecutableBlock {
 	private DockerApi dockerApi = new DockerApi()
 	
 	@Override
-	def beforeExecute() {
-		this.executionContext.variables["imageContext"] = [image: image + new Random().nextInt()]
-		this.executionContext.variables["currentUser"] = "root"
-		this.executionContext.variables["currentDirectory"] = "/"
+	def beforeExecute(ExecutionContext executionContext) {
+		executionContext.variables["imageContext"] = [image: image + new Random().nextInt()]
+		executionContext.variables["currentUser"] = "root"
+		executionContext.variables["currentDirectory"] = "/"
 	}
 
 	@Override
-	def afterExecute(Map blockVars) {
-		Map imageContext = this.executionContext.variables["imageContext"]?:[:]
-		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)		
+	def afterExecute(ExecutionContext executionContext, Map blockVars) {
+		Map imageContext = executionContext.variables["imageContext"]?:[:]
+		Map containerConfig = HelperFunctions.buildContainerConfig(executionContext)		
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		
 		println "Committing final image."
 		println "Maintainer=${blockVars.maintainer}, Labels=${blockVars.labels}"
 		imageContext["maintainer"] = blockVars.maintainer
-		def commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
+		def commitQuery = HelperFunctions.buildCommitQuery(executionContext)
 		def commitConfig =[Entrypoint: imageContext.onstart?.entrypoint,
 						   Cmd: imageContext.onstart?.parameters,
 						   WorkingDir: imageContext.onstart?.directory,

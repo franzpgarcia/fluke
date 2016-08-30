@@ -10,11 +10,21 @@ import fluke.annotation.OperationMethod;
 import fluke.exception.InvalidOperationCallException;
 
 trait Execution {
+	String blockName
 	Object outer
 	OperationMap operationMap
 	ExecutionContext executionContext
 
-	def executeOperation(Class opClass, args) {
+	def methodMissing(String name, args) {
+		Class opClass = this.getOperationMap()[name]
+		if(opClass) {
+			executeOperation(name, opClass, args)
+		} else {
+			this.outer.invokeMethod(name, args)
+		}
+	}
+	
+	def executeOperation(String name, Class opClass, args) {
 		Object operation = opClass.newInstance(this.getExecutionContext())
 		MetaMethod opMethod = findOperationMethod(operation, args)
 		if(opMethod) {
@@ -28,16 +38,7 @@ trait Execution {
 			}
 			opMethod.invoke(operation, adaptedArgs)
 		} else {
-			throw new InvalidOperationCallException()
-		}
-	}
-
-	def methodMissing(String name, args) {
-		Class opClass = this.getOperationMap()[name]
-		if(opClass) {
-			executeOperation(opClass, args)
-		} else {
-			this.outer.invokeMethod(name, args)
+			throw new InvalidOperationCallException(name, blockName)
 		}
 	}
 

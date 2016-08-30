@@ -20,7 +20,7 @@ class ProcedureOperation {
 	
 	@OperationMethod
 	def procedure(String procedure, Closure closure) {
-		this.executionContext.procedures[procedure] = new ProcedureBlock(executionContext: this.executionContext.copy(), block: closure)
+		this.executionContext.procedures[procedure] = new ProcedureBlock(block: closure)
 	}
 	
 	@OperationMethod

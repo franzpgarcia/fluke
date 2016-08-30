@@ -20,7 +20,7 @@ import fluke.operation.map.OperationMap;
 import fluke.script.ScriptExecution;
 import fluke.script.ScriptRunner;
 
-class App implements BuiltInFunctions {
+class App {
 
 	static void main(String[] args) {
 		FlukeCli flukeCli = new FlukeCli()

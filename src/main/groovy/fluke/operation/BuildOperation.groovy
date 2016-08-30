@@ -3,6 +3,7 @@ package fluke.operation;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.ImageBlock;
+import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("build")
@@ -21,12 +22,11 @@ class BuildOperation {
 		if(image && !variables.disableBuilds) {
 			ImageBlock imageBlock = this.executionContext.images[image]
 			if(imageBlock) {
-				println "Building image ${image}"
-				imageBlock.eval()
+				println "------ Building image ${image} -------"
+				imageBlock.eval(this.executionContext)
 				println "Build ${image} completed successfully"
 			} else {
-				println "Image ${image} not found"
-				//TODO throw exception
+				throw new OperationException("Image ${image} not defined")
 			}
 		}
 	}

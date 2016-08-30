@@ -1,20 +1,22 @@
 package fluke.block
 
 import fluke.annotation.AllowedOperations;
+import fluke.annotation.Block;
 import fluke.execution.ExecutionContext;
 
+@Block(of="with")
 @AllowedOperations(["run", "install"])
 class WithBlock implements ExecutableBlock {
 	String user
 	String directory
 	
 	@Override
-	def beforeExecute() {
+	def beforeExecute(ExecutionContext executionContext) {
 		if(user) {
-			this.executionContext.variables["currentUser"] = user
+			executionContext.variables["currentUser"] = user
 		}
 		if(directory) {
-			this.executionContext.variables["currentDirectory"] = directory
+			executionContext.variables["currentDirectory"] = directory
 		}
 	}
 	
