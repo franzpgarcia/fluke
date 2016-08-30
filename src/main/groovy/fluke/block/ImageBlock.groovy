@@ -25,7 +25,6 @@ class ImageBlock implements ExecutableBlock, ConsoleOutputGenerator {
 	
 	@Override
 	def beforeExecute(ExecutionContext executionContext) {
-		executionContext.variables["imageContext"] = [image: image + new Random().nextInt()]
 		executionContext.variables["currentUser"] = "root"
 		executionContext.variables["currentDirectory"] = "/"
 	}

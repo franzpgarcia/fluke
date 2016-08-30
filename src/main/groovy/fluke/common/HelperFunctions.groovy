@@ -15,10 +15,12 @@ final class HelperFunctions {
 	}
 
 	public static Map buildContainerConfig(ExecutionContext executionContext) {
-		Map imageContext = executionContext.variables["imageContext"]
-		String currentImageId = imageContext["currentImageId"]
-		String user = executionContext.variables["currentUser"]
-		String directory = executionContext.variables["currentDirectory"]
+		Map variables = executionContext.variables
+		Map imageContext = variables.imageContext
+		
+		String currentImageId = imageContext.currentImageId
+		String user = variables.currentUser
+		String directory = variables.currentDirectory
 		if(!currentImageId) {
 			throw new OperationException("Unable to proceed with build because of missing `from image`")
 		}
@@ -29,10 +31,13 @@ final class HelperFunctions {
 	}
 
 	public static Map buildCommitQuery(ExecutionContext executionContext) {
-		Map imageContext = executionContext.variables["imageContext"]
-		String image = imageContext["image"]
-		String tag = imageContext["tag"]?:"latest"
-		String author = imageContext["maintainer"]
-		return [repo: image, tag: tag, author: author]
+		Map variables = executionContext.variables
+		Map imageContext = variables.imageContext
+		
+		String image = imageContext.image
+		int buildNumber = imageContext.buildNumber
+		String tag = imageContext.tag
+		String author = imageContext.maintainer
+		return [repo: "${image}-${buildNumber}", tag: tag, author: author]
 	}
 }
