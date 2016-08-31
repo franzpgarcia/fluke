@@ -11,7 +11,7 @@ trait BuiltInFunctions {
 	
 	InputStream template(String path, Map binding) {
 		InputStream stream = new FileInputStream(path)
-		return template(stream, vars)
+		return template(stream, binding)
 	}
 
 	InputStream template(InputStream stream, Map binding) {
