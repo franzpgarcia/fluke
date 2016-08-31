@@ -28,6 +28,15 @@ class ImageBlock implements ExecutableBlock, ConsoleOutputGenerator {
 		executionContext.variables["currentUser"] = "root"
 		executionContext.variables["currentDirectory"] = "/"
 	}
+	
+	@Override
+	def onError(Exception error, ExecutionContext executionContext) {
+		Map imageContext = executionContext.variables.imageContext
+		if(imageContext.currentImageId) {
+			dockerApi.rmi(imageContext.currentImageId)
+		}
+		throw error
+	}
 
 	@Override
 	def afterExecute(ExecutionContext executionContext, Map blockVars) {

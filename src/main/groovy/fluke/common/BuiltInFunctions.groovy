@@ -23,6 +23,15 @@ trait BuiltInFunctions {
 		return new FileInputStream(source)
 	}
 	
+	Map config(String source) {
+		InputStream stream = new FileInputStream(source)
+		return this.config(stream)
+	}
+	
+	Map config(InputStream stream) {
+		return new ConfigSlurper().parse(stream.readLines().join("\n"))
+	}
+	
 	def shell = {
 		cmd -> HelperFunctions.buildShellCommand(cmd)
 	}

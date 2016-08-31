@@ -3,6 +3,8 @@ package fluke.cli
 import fluke.script.ScriptRunner
 
 class FlukeCli {
+	def printErr = System.err.&println
+	
 	private static final String VERSION = "0.1"
 	
 	private CliBuilder cli
@@ -40,9 +42,17 @@ class FlukeCli {
 	
 	private void runScript(String path, String build, Map args) {
 		File file = new File(path)
-		FileInputStream stream = new FileInputStream(file)
-		String script = stream.readLines().join("\n")
-		this.scriptRunner.runScript(script, build, args)
+		try {
+			FileInputStream stream = new FileInputStream(file)
+			String script = stream.readLines().join("\n")
+			this.scriptRunner.runScript(script, build, args)
+		} catch(FileNotFoundException e) {
+			printErr "Error: Cannot find file ${file}"
+			System.exit(1)
+		} catch(Exception e) {
+			printErr "Error: ${e.message}"
+			System.exit(1)
+		}
 	}
 	
 	private void help() {

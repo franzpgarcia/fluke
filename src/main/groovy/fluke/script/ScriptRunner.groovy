@@ -38,7 +38,7 @@ class ScriptRunner {
 			printErr "Error has occurred at line ${lineIssue}:"
 			printErr "\t${e.message}\n"
 			int startLine = Math.max(0, lineElement.lineNumber - 2)
-			int finalLine = Math.min(lineElement.lineNumber + 4, scriptStr.length() -1)
+			int finalLine = Math.min(lineElement.lineNumber + 4, scriptStr.split("\n").size() - 1)
 			int curLine = startLine + 1
 			scriptStr.split("\n")[startLine..finalLine].each {
 				printErr "******** ${curLine}\t=>\t${it}"

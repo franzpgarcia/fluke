@@ -97,4 +97,22 @@ class DockerApi {
 			throw new DockerApiException("Unable to pull image ${image}:${tag}")
 		}
 	}
+
+	void rmi(String imageId) {
+		try{
+			dockerClient.rmi(imageId)
+		} catch(DockerClientException e) {
+			throw new DockerApiException("Unable to remove image ${imageId}")
+		}
+	}
+	
+	Boolean imageExists(String image) {
+		try{
+			def response = dockerClient.inspectImage(image)
+			println response.content != null
+			return response.content?.Id != null
+		} catch(DockerClientException e) {
+			return false
+		}
+	}
 }

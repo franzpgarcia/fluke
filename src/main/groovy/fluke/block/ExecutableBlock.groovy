@@ -24,12 +24,20 @@ trait ExecutableBlock {
 											executionContext: executionContextCopy, 
 											operationMap: buildOperationMap(blockName))
 		clone.resolveStrategy = Closure.DELEGATE_FIRST
-		clone()
-		afterExecute(executionContext, clone.binding.variables)
+		try {
+			clone()
+			afterExecute(executionContext, clone.binding.variables)
+		} catch(Exception e) {
+			onError(e, executionContextCopy)
+		}
 	}
 	
 	def beforeExecute(ExecutionContext executionContext) {
 		
+	}
+	
+	def onError(Exception e, ExecutionContext executionContext) {
+		throw e
 	}
 	
 	def afterExecute(ExecutionContext executionContext, Map blockVars) {

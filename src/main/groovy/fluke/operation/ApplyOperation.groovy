@@ -6,6 +6,7 @@ import fluke.block.ProcedureBlock;
 import fluke.block.ImageBlock;
 import fluke.common.ConsoleOutputGenerator;
 import fluke.exception.NotImplementedYetException;
+import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("apply")
@@ -35,7 +36,7 @@ class ApplyOperation implements ConsoleOutputGenerator {
 			if(procedureBlock) {
 				procedureBlock.eval(this.executionContext)
 			} else {
-				//TODO throw exception
+				throw OperationException("Procedure ${procedure} not defined")
 			}
 		}
 	}
