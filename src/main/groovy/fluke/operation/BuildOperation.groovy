@@ -44,10 +44,11 @@ class BuildOperation implements ConsoleOutputGenerator {
 				variables.imageContext = [image: image,
 										  buildNumber: Math.abs(new Random().nextInt()),
 										  tag: tag]
-				boolean imageExists = this.dockerApi.imageExists("${image}:${tag}")
-				if(imageExists) {
-					throw new OperationException("Image ${image}:${tag} already exists")
-				}
+				//TODO: Put back image exists check. Add force flag.
+				//boolean imageExists = this.dockerApi.imageExists("${image}:${tag}")
+				//if(imageExists) {
+				//	throw new OperationException("Image ${image}:${tag} already exists")
+				//}
 				imageBlock.eval(this.executionContext)
 				printMessage "Build of image ${image}:${tag} completed successfully\n"
 			} catch(Exception e) {
