@@ -109,7 +109,6 @@ class DockerApi {
 	Boolean imageExists(String image) {
 		try{
 			def response = dockerClient.inspectImage(image)
-			println response.content != null
 			return response.content?.Id != null
 		} catch(DockerClientException e) {
 			return false

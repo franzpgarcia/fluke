@@ -1,5 +1,8 @@
 package fluke.operation
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
@@ -35,16 +38,25 @@ class CopyOperation implements ConsoleOutputGenerator {
 	}
 
 	@OperationMethod
-	def copy(InputStream stream, String name, String dest) {		
+	def copy(InputStream stream, String dest) {		
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
 		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("COPYING stream TO ${dest}")]
 		
-		printMessage "Copying file ${name} to ${dest}"
+		printMessage "Copying file stream to ${dest}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
-		dockerApi.putArchive(containerResponse.id, dest, tarCompressor.tar(stream, name))
+		dockerApi.putArchive(containerResponse.id, getParent(dest), tarCompressor.tar(stream, getFilename(dest)))
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(containerResponse.id, commitQuery, true).imageId
 		printCommit imageContext.currentImageId
+	}
+	
+	private String getFilename(String dest) {
+		String path = Paths.get(dest).fileName.toString()
+	}
+	
+	private String getParent(String dest) {
+		String path = Paths.get(dest).parent
+		return dest.contains("\\") ? path : path.replace("\\", "/") 
 	}
 }

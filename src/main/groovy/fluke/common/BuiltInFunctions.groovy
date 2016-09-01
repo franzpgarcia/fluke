@@ -5,7 +5,8 @@ import groovy.text.Template
 
 import java.io.InputStream;
 import java.util.Map;
-
+import java.io.StringWriter;
+import java.io.ByteArrayInputStream
 trait BuiltInFunctions {
 	private SimpleTemplateEngine templateEngine = new SimpleTemplateEngine()
 	
@@ -15,8 +16,10 @@ trait BuiltInFunctions {
 	}
 
 	InputStream template(InputStream stream, Map binding) {
-		Template template = templateEngine.createTemplate(new BufferedReader(stream))
-		return template.make(binding)
+		Template template = templateEngine.createTemplate(new InputStreamReader(stream))
+		StringWriter writer = new StringWriter()
+		template.make(binding).writeTo(writer)
+		return new ByteArrayInputStream(writer.toString().getBytes("UTF-8"))
 	}
 	
 	InputStream file(String source) {
