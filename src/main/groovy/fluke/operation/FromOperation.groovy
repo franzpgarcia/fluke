@@ -32,12 +32,6 @@ class FromOperation {
 	def from(Map<String, Object> imageMap) {
 		Map imageContext = this.executionContext.variables.imageContext
 		
-		String[] imageSplit = imageMap.image.split(":")
-		imageMap.image = imageSplit[0]
-		if(imageMap.tag) {
-			imageMap.tag = imageSplit.size() > 1 ? imageSplit[1]:"latest"
-		}
-		
 		if(imageContext.currentImageId) {
 			throw new OperationException("Duplicate `from` operation call in image \"${imageContext.image}\"")
 		}
