@@ -36,6 +36,6 @@ trait BuiltInFunctions {
 	}
 	
 	def shell = {
-		cmd -> HelperFunctions.buildShellCommand(cmd)
+		executionContext, cmd -> HelperFunctions.buildShellCommand(executionContext, cmd)
 	}
 }

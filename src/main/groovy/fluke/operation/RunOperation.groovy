@@ -28,23 +28,36 @@ class RunOperation {
 	}
 	
 	@OperationMethod
+	def run(Closure closure, List<String> args) {
+		List<String> adaptedArgs = closure(this.executionContext, args)
+		ExecutableBlock currentBlock = this.executionContext.currentBlock
+		if(currentBlock.isBlockOf("onelayer")) {
+			delayedRun(adaptedArgs)
+		} else {
+			runNow(adaptedArgs)
+		}
+	}
+	
+	@OperationMethod
 	def run(Closure closure, String... args) {
-		this.run(closure(args.join(" ")))
+		this.run(closure, args as List)
 	}
 	
 	@OperationMethod
 	def run(String... args) {
-		this.run(args as List)
+		this.run(getShellClosure(), args)
 	}
 	
 	@OperationMethod
 	def run(List<String> args) {
-		ExecutableBlock currentBlock = this.executionContext.currentBlock
-		if(currentBlock.isBlockOf("onelayer")) {
-			delayedRun(args)
-		} else {
-			runNow(args)
+		this.run(getShellClosure(), args)
+	}
+	
+	private Closure getShellClosure() {
+		if(this.executionContext.variables.currentShell) {
+			return HelperFunctions.&buildShellCommand
 		}
+		return {ctx, i -> i}
 	}
 	
 	def runNow(List<String> args) {

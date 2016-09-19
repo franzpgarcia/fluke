@@ -58,7 +58,7 @@ class InstallOperation {
 			cmd += "(${pm} --version &>/dev/null && echo \"${pm}\") ||"
 		}
 		cmd += "echo 'none'"
-		return HelperFunctions.buildShellCommand(cmd)
+		return HelperFunctions.buildShellCommand(this.executionContext, cmd)
 	}
 
 	private List<String> buildInstallPackageCmd(String packageManager, String pckge, boolean update = false) {
@@ -79,6 +79,7 @@ class InstallOperation {
 			case "none": 
 				throw new OperationException("Unable to install package. Package manager couldn't be found.")
 		}
-		return HelperFunctions.buildShellCommand(cmd)
+		return HelperFunctions.buildShellCommand(this.executionContext, cmd)
 	}
+	
 }

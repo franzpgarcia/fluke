@@ -29,6 +29,7 @@ class ImageBlock implements ExecutableBlock {
 	def beforeExecute(ExecutionContext executionContext) {
 		executionContext.variables["currentUser"] = "root"
 		executionContext.variables["currentDirectory"] = "/"
+		executionContext.variables["currentShell"] = null
 	}
 	
 	@Override

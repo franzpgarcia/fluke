@@ -73,7 +73,7 @@ class ApplyOperation {
 		String cmd = buildScriptCmd(scriptPath, script)
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildShellCommand(cmd)]
+		containerConfig << [Cmd: HelperFunctions.buildShellCommand(this.executionContext, cmd)]
 		
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)

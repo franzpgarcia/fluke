@@ -4,6 +4,7 @@ import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.WithBlock;
 import fluke.common.FlukeConsole;
+import fluke.exception.OperationException
 import fluke.execution.ExecutionContext;
 
 @Operation("with")
@@ -20,6 +21,7 @@ class WithOperation {
 	def with(Map<String, String> useMap) {
 		withUser(useMap.user)
 		withDirectory(useMap.directory)
+		withShell(useMap.shell)
 	}
 	
 	@OperationMethod
@@ -30,13 +32,19 @@ class WithOperation {
 	
 	private void withUser(String user) {
 		if(user) {
-			this.executionContext["currentUser"] = user
+			this.executionContext.variables["currentUser"] = user
 		} 
 	}
 	
 	private void withDirectory(String directory) {
 		if(directory) {
-			this.executionContext["currentDirectory"] = directory
+			this.executionContext.variables["currentDirectory"] = directory
+		}
+	}
+	
+	private void withShell(String shell) {
+		if(shell) {
+			this.executionContext.variables["currentShell"] = shell
 		}
 	}
 }
