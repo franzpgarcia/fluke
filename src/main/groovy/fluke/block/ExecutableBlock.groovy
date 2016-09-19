@@ -17,12 +17,15 @@ trait ExecutableBlock {
 	def eval(ExecutionContext executionContext) {
 		def clone = block.clone()
 		beforeExecute(executionContext)
+		
 		def executionContextCopy = executionContext.copy()
-		String blockName = this.getClass().getAnnotation(Block.class)?.of()
+		executionContextCopy.currentBlock = this
+		
+		String blockOf = getBlockOf()
 		clone.delegate = new BlockExecution(outer: this, 
-											blockName: blockName,
+											blockName: blockOf,
 											executionContext: executionContextCopy, 
-											operationMap: buildOperationMap(blockName))
+											operationMap: buildOperationMap(blockOf))
 		clone.resolveStrategy = Closure.DELEGATE_FIRST
 		try {
 			clone()
@@ -30,6 +33,14 @@ trait ExecutableBlock {
 		} catch(Exception e) {
 			onError(e, executionContextCopy)
 		}
+	}
+	
+	String getBlockOf() {
+		return this.getClass().getAnnotation(Block.class)?.of()
+	}
+	
+	boolean isBlockOf(String of) {
+		return of == getBlockOf()
 	}
 	
 	def beforeExecute(ExecutionContext executionContext) {

@@ -1,19 +1,31 @@
 package fluke.api
 
+import de.gesellix.docker.client.DockerAsyncCallback;
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientException;
 import de.gesellix.docker.client.DockerClientImpl;
+import fluke.common.FlukeConsole;
 import fluke.exception.DockerApiException;
 import fluke.exception.OperationException;
+import groovy.json.JsonSlurper;
 
 class DockerApi {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+
 	private DockerClient dockerClient = new DockerClientImpl()
 
-	Map run(String image, Map containerConfig) {
+	Map run(String image, Map containerConfig, boolean showLogs = false) {
 		try {
 			Map result = [:]
 			def runResponse = dockerClient.run(image, containerConfig)
 			result << [containerId: runResponse["container"]["content"]["Id"]]
+			if(showLogs) {
+				dockerClient.logs(result.containerId, new DockerAsyncCallback() {
+							def onEvent(event) {
+								console.printContainerLog(event)
+							}
+						})
+			}
 			result << this.wait(result.containerId)
 			result << this.logs(result.containerId)
 			return result
@@ -90,14 +102,29 @@ class DockerApi {
 		}
 	}
 
-	Map pull(String image, String tag) {
+	Map pull(String image, tag = "", authBase64Encoded = ".") {
 		try {
-			def pullResponse = [id: dockerClient.pull(image, tag?:"latest")]
+			def response = dockerClient.getHttpClient().post([path   : "/images/create",
+				query  : [fromImage: image,
+					tag      : tag,
+					registry : ""],
+				async : true,
+				headers: ["X-Registry-Auth": "."]])
+			PullProgressHandler handler = new PullProgressHandler()
+			InputStreamReader reader = new InputStreamReader(response.stream)
+			String line
+			while((line = reader.readLine()) != null) {
+				if(!line.isEmpty()) {
+					def jsonSlurper = new JsonSlurper()
+					handler.handle(jsonSlurper.parseText(line))
+				}
+			}
+			return [id: dockerClient.findImageId(image, tag)]
 		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to pull image ${image}:${tag}")
 		}
 	}
-
+	
 	void rmi(String imageId) {
 		try{
 			dockerClient.rmi(imageId)
@@ -105,11 +132,11 @@ class DockerApi {
 			throw new DockerApiException("Unable to remove image ${imageId}")
 		}
 	}
-	
-	Boolean imageExists(String image) {
+
+	Map image(String image) {
 		try{
 			def response = dockerClient.inspectImage(image)
-			return response.content?.Id != null
+			return response.content
 		} catch(DockerClientException e) {
 			return false
 		}

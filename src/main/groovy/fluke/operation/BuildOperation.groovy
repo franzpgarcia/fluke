@@ -4,12 +4,13 @@ import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
 import fluke.block.ImageBlock;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.common.FlukeConsole;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
 @Operation("build")
-class BuildOperation implements ConsoleOutputGenerator {
+class BuildOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
 	
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
@@ -38,24 +39,34 @@ class BuildOperation implements ConsoleOutputGenerator {
 	def buildImage(String image, String tag) {		
 		ImageBlock imageBlock = this.executionContext.images[image]
 		if(imageBlock) {
-			printMessage "\n------ Building image ${image}:${tag} -------"
+			console.printMessage "\n------ Building image ${image}:${tag} -------"
 			try {
 				Map variables = this.executionContext.variables
 				variables.imageContext = [image: image,
 										  buildNumber: Math.abs(new Random().nextInt()),
 										  tag: tag]
-				boolean imageExists = this.dockerApi.imageExists("${image}:${tag}")
-				if(imageExists) {
-					throw new OperationException("Image ${image}:${tag} already exists")
-				}
+				checkPreviousImage(image, tag)
 				imageBlock.eval(this.executionContext)
-				printMessage "Build of image ${image}:${tag} completed successfully\n"
+				console.printMessage "Build of image ${image}:${tag} completed successfully\n"
 			} catch(Exception e) {
-				printMessage "Build of image ${image}:${tag} failed\n"
+				console.printMessage "Build of image ${image}:${tag} failed\n"
 				throw e
 			}
 		} else {
 			throw new OperationException("Image ${image} not defined")
+		}
+	}
+
+	private checkPreviousImage(String image, String tag) {
+		boolean force = this.executionContext.variables.force
+
+		String prevImageId = this.dockerApi.image("${image}:${tag}")?.Id
+		if(prevImageId) {
+			if(force) {
+				this.dockerApi.rmi(prevImageId)
+			} else {
+				throw new OperationException("Image ${image}:${tag} already exists")
+			}
 		}
 	}
 	

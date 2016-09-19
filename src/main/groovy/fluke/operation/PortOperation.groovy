@@ -5,12 +5,14 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Operation("port")
-class PortOperation implements ConsoleOutputGenerator {
+class PortOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+	
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 
@@ -30,10 +32,10 @@ class PortOperation implements ConsoleOutputGenerator {
 		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("EXPOSING ${port} ${protocol}"),
 							ExposedPorts: ["${port}/${protocol}": [:]]]
 		
-		printMessage "Exposing port ${port}/${protocol}"
+		console.printMessage "Exposing port ${port}/${protocol}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(containerResponse.id, commitQuery, true).imageId
-		printCommit imageContext.currentImageId
+		console.printCommit imageContext.currentImageId
 	}
 }

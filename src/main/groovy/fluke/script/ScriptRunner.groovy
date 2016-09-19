@@ -11,11 +11,12 @@ class ScriptRunner {
 	ScriptRunner() {
 	}
 	
-	def runScript(String scriptStr, String build, Map args) {
+	def runScript(String scriptStr, String build, Map args, boolean force) {
 		String scriptName = "FlukeScript" + Math.abs(new Random().nextInt());
 		try {
 			DelegatingScript script = (DelegatingScript) this.parseScript(scriptStr, scriptName, args)
 			ScriptExecution scriptExecution = new ScriptExecution(outer: this)
+			scriptExecution.addToContext("force", force)
 			if(build) {
 				scriptExecution.disableBuilds()
 			}

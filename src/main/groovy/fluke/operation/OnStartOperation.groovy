@@ -2,11 +2,13 @@ package fluke.operation;
 
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.common.FlukeConsole;
 import fluke.execution.ExecutionContext;
 
 @Operation("onstart")
-public class OnStartOperation implements ConsoleOutputGenerator {
+public class OnStartOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+	
 	private ExecutionContext executionContext
 	
 	OnStartOperation(ExecutionContext executionContext) {

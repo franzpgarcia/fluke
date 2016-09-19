@@ -3,12 +3,14 @@ package fluke.operation
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Operation("setenv")
-class SetEnvOperation implements ConsoleOutputGenerator {
+class SetEnvOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+	
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 	
@@ -23,10 +25,10 @@ class SetEnvOperation implements ConsoleOutputGenerator {
 		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("ADDING ENVIRONMENT VARIABLES ${envs}"),
 							Env: envs.collect {k, v -> "${k}=${v}"}]
 		
-		printMessage "Setting environment variables ${envs}"
+		console.printMessage "Setting environment variables ${envs}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
 		Map commitQuery =  HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(containerResponse.id, commitQuery, true).imageId
-		printCommit imageContext.currentImageId
+		console.printCommit imageContext.currentImageId
 	}
 }

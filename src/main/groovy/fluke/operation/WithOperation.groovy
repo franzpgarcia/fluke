@@ -3,12 +3,13 @@ package fluke.operation
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.block.WithBlock;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.common.FlukeConsole;
 import fluke.execution.ExecutionContext;
 
 @Operation("with")
-class WithOperation implements ConsoleOutputGenerator {
-
+class WithOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+	
 	private ExecutionContext executionContext
 	
 	WithOperation(ExecutionContext executionContext) {

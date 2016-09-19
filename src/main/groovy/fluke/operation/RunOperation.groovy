@@ -11,12 +11,15 @@ import de.gesellix.docker.client.DockerClientImpl;
 import fluke.annotation.Operation;
 import fluke.annotation.OperationMethod;
 import fluke.api.DockerApi;
-import fluke.common.ConsoleOutputGenerator;
+import fluke.block.ExecutableBlock;
+import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Operation("run")
-class RunOperation implements ConsoleOutputGenerator {
+class RunOperation {
+	private static FlukeConsole console = FlukeConsole.getConsole()
+	
 	private ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 	
@@ -36,15 +39,28 @@ class RunOperation implements ConsoleOutputGenerator {
 	
 	@OperationMethod
 	def run(List<String> args) {
+		ExecutableBlock currentBlock = this.executionContext.currentBlock
+		if(currentBlock.isBlockOf("onelayer")) {
+			delayedRun(args)
+		} else {
+			runNow(args)
+		}
+	}
+	
+	def runNow(List<String> args) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
 		containerConfig << [Cmd: args]
 		
-		printMessage "Running command ${args}"
+		console.printMessage "Running command ${args}"
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(runResponse.containerId, commitQuery, true).imageId
-		printCommit imageContext.currentImageId
+		console.printCommit imageContext.currentImageId
 	}
 	
+	def delayedRun(List<String> args) {
+		Map onelayer = this.executionContext.variables.onelayer
+		onelayer.run << [args.join(" ")]
+	}
 }
