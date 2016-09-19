@@ -15,7 +15,7 @@ import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Block(of="image")
-@AllowedOperations(["procedure", "from", "apply", "volume", "port", "onstart", "port", "setenv"])
+@AllowedOperations(["procedure", "from", "apply", "onstart", "run", "port", "install", "copy", "volume", "with", "setenv"])
 class ImageBlock implements ExecutableBlock {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
