@@ -73,14 +73,22 @@ class DelayedWith {
 	ExecutionContext executionContext
 	String with
 	
+	def run(List<String> args) {
+		this.run(*args)
+	}
+	
 	def run(String... args) {
 		Shell shell = Shell.get(executionContext, with)
 		shell(args)
 	}
 	
-	def install(String name) {
+	def install(List<String> pckages) {
+		this.install(*pckages)
+	}
+	
+	def install(String... pckages) {
 		InstallOperation installOp = new InstallOperation(executionContext)
-		installOp(with, name)
+		installOp(PackageManager.get(this.executionContext, with), pckages)
 	}
 }
 
@@ -91,14 +99,22 @@ class WithShell {
 	def run(String... args) {
 		shell(args)
 	}
+	
+	def run(List<String> args) {
+		shell(args)
+	}
 }
 
 class WithPm {
 	ExecutionContext executionContext
 	PackageManager pm
 	
-	def install(String name) {
+	def install(List<String> pckages) {
+		this.install(*pckages)
+	}
+	
+	def install(String... pckages) {
 		InstallOperation installOp = new InstallOperation(executionContext)
-		installOp(pm, name)
+		installOp(pm, pckages)
 	}
 }

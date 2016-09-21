@@ -12,6 +12,7 @@ import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.exception.InvalidPackageManagerException;
 import fluke.execution.ExecutionContext
+import fluke.shell.Bash;
 
 @AllowedIn(["image", "procedure", "with"])
 abstract class PackageManager {
@@ -29,13 +30,13 @@ abstract class PackageManager {
 	ExecutionContext executionContext
 	private DockerApi dockerApi = new DockerApi()
 	
-	def call(String pckage) {
+	def call(String... pckages) {
 		Map imageContext = this.executionContext.variables.imageContext
 		boolean update = true
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: buildInstallPackageCmd(pckage, update)]
+		containerConfig << [Cmd: buildInstallPackageCmd(pckages.join(" "), update)]
 
-		console.printMessage "Installing package ${pckage}"
+		console.printMessage "Installing package ${pckages}"
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig, true)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(runResponse.containerId, commitQuery, true).imageId
@@ -55,7 +56,7 @@ abstract class PackageManager {
 			cmds << "${updateRepoCmd}"
 		}
 		cmds << this.getInstallPackageCmd(pckge)
-		return HelperFunctions.buildShellCommand(this.executionContext, cmds.join(" && "))
+		return new Bash(this.executionContext).buildShellCmd(cmds.join(" && "))
 	}
 	
 	public static PackageManager get(ExecutionContext context, String keyword) {

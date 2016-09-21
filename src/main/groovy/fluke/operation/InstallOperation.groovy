@@ -11,6 +11,7 @@ import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 import fluke.packagemanager.OsPackageManager;
 import fluke.packagemanager.PackageManager;
+import fluke.shell.Bash;
 
 @AllowedIn(["image", "procedure", "with"])
 @Keyword("install")
@@ -23,19 +24,23 @@ class InstallOperation {
 	InstallOperation(ExecutionContext executionContext) {
 		this.executionContext = executionContext
 	}
+	
+	def call(List<String> pckages) {
+		this.call(*pckges)
+	}
 
-	def call(String pckage) {
+	def call(String... pckages) {
 		Map variables = this.executionContext.variables
 		String pm = variables.currentPackageManager?:findDefaultPackageManager()
-		this.call(pm, pckage)
+		this.call(PackageManager.get(this.executionContext, pm), pckages)
 	}
 	
-	def call(String pm, String pckage) {
-		this.call(PackageManager.get(this.executionContext, pm), pckage)
+	def call(PackageManager pm, List<String> pckages) {
+		pm(pckages)
 	}
 	
-	def call(PackageManager pm, String pckage) {
-		pm(pckage)
+	def call(PackageManager pm, String... pckages) {
+		pm(pckages)
 	}
 	
 	private String findDefaultPackageManager() {
@@ -57,7 +62,7 @@ class InstallOperation {
 										  .findAll {e -> e.value in OsPackageManager}
 										  .collect { e -> "(" +e.value.getVersionCmd() + " &>/dev/null && echo \"" + e.key + "\")"}
 		cmds << "echo 'none'"
-		return HelperFunctions.buildShellCommand(this.executionContext, cmds.join(" || "))
+		return new Bash(this.executionContext).buildShellCmd(cmds.join(" || "))
 	}
 	
 }

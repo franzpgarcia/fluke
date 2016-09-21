@@ -50,7 +50,7 @@ class DockerApi {
 				log.replaceAll("[^\\x20-\\x7e]", "")
 			}
 			return [logs: logs]
-		} catch(DockerApiException) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to get logs for ${containerId}")
 		}
 	}
