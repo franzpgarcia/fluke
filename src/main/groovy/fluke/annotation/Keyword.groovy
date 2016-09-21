@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@interface AllowedOperations {
-	String[] value()
+@interface Keyword {
+	String value()
 }

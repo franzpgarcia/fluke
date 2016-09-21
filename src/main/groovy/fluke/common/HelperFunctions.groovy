@@ -19,8 +19,8 @@ final class HelperFunctions {
 		return [name, cmd]
 	}
 
-	public static List<String> buildNoOpCommand(String cmd) {
-		return buildShellCommand(DEFAULT_SHELL, "#(noop) ${cmd}")
+	public static List<String> buildNoOpCommand(ExecutionContext executionContext, String cmd) {
+		return buildShellCommand(executionContext, "#(noop) ${cmd}")
 	}
 
 	public static Map buildContainerConfig(ExecutionContext executionContext) {

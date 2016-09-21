@@ -6,7 +6,6 @@ import java.util.Map;
 
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
-import fluke.annotation.AllowedOperations;
 import fluke.annotation.Block;
 import fluke.api.DockerApi;
 import fluke.block.ProcedureBlock;
@@ -15,7 +14,6 @@ import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
 @Block(of="image")
-@AllowedOperations(["procedure", "from", "apply", "onstart", "run", "port", "install", "copy", "volume", "with", "setenv"])
 class ImageBlock implements ExecutableBlock {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

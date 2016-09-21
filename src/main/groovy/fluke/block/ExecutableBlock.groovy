@@ -5,16 +5,15 @@ import groovy.lang.Closure;
 import java.util.LinkedHashMap;
 
 import fluke.annotation.Block;
-import fluke.annotation.AllowedOperations;
-import fluke.exception.InvalidOperationCallException
+import fluke.exception.InvalidCallException
 import fluke.execution.BlockExecution
 import fluke.execution.ExecutionContext;
-import fluke.operation.map.OperationMap;
+import fluke.keyword.KeywordMap;
 
 trait ExecutableBlock {
 	Closure block
 	
-	def eval(ExecutionContext executionContext) {
+	def call(ExecutionContext executionContext) {
 		def clone = block.clone()
 		beforeExecute(executionContext)
 		
@@ -25,7 +24,7 @@ trait ExecutableBlock {
 		clone.delegate = new BlockExecution(outer: this, 
 											blockName: blockOf,
 											executionContext: executionContextCopy, 
-											operationMap: buildOperationMap(blockOf))
+											keywordMap: new KeywordMap(blockOf))
 		clone.resolveStrategy = Closure.DELEGATE_FIRST
 		try {
 			clone()
@@ -53,10 +52,5 @@ trait ExecutableBlock {
 	
 	def afterExecute(ExecutionContext executionContext, Map blockVars) {
 		
-	}
-	
-	private OperationMap buildOperationMap(String blockName) {
-		AllowedOperations annotation = this.getClass().getAnnotation(AllowedOperations.class)
-		return new OperationMap(blockName, annotation.value())
 	}
 }

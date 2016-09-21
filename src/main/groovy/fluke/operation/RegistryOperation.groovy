@@ -1,10 +1,11 @@
 package fluke.operation
 
-import fluke.annotation.Operation;
+import fluke.annotation.Keyword;
 import fluke.common.FlukeConsole;
+import fluke.exception.NotImplementedYetException;
 import fluke.execution.ExecutionContext;
 
-@Operation("registry")
+@Keyword("registry")
 class RegistryOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -13,5 +14,8 @@ class RegistryOperation {
 	RegistryOperation(ExecutionContext executionContext) {
 		this.executionContext = executionContext
 	}
-	
+
+	def call() {
+		throw new NotImplementedYetException()
+	}	
 }

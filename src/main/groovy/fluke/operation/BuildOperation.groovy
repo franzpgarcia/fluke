@@ -1,14 +1,15 @@
 package fluke.operation;
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.block.ImageBlock;
 import fluke.common.FlukeConsole;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
-@Operation("build")
+@AllowedIn("script")
+@Keyword("build")
 class BuildOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -19,8 +20,7 @@ class BuildOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def build(Map build) {
+	def call(Map build) {
 		Map variables = this.executionContext.variables
 		String imageInput = build.image
 		if(!variables.disableBuilds) {
@@ -46,7 +46,7 @@ class BuildOperation {
 										  buildNumber: Math.abs(new Random().nextInt()),
 										  tag: tag]
 				checkPreviousImage(image, tag)
-				imageBlock.eval(this.executionContext)
+				imageBlock(this.executionContext)
 				console.printMessage "Build of image ${image}:${tag} completed successfully\n"
 			} catch(Exception e) {
 				console.printMessage "Build of image ${image}:${tag} failed\n"

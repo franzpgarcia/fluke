@@ -1,16 +1,19 @@
 package fluke.operation
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
-import fluke.exception.InvalidOperationCallException;
+import fluke.exception.InvalidCallException;
 import fluke.exception.NotImplementedYetException;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
+import fluke.packagemanager.OsPackageManager;
+import fluke.packagemanager.PackageManager;
 
-@Operation("install")
+@AllowedIn(["image", "procedure", "with"])
+@Keyword("install")
 class InstallOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -21,65 +24,40 @@ class InstallOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def install(Map<String, String> install) {
-		String pckage = install["package"]		
-		installPackage(pckage)
-
-	}
-
-	private void installPackage(String pckage) {
-		Map imageContext = this.executionContext.variables.imageContext
-		boolean update = imageContext.packageManager == null
-		String packageManager = imageContext.packageManager?:findPackageManager()
-		
-		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: buildInstallPackageCmd(packageManager, pckage, update)]
-
-		console.printMessage "Installing package ${pckage}"
-		def runResponse = dockerApi.run(containerConfig.Image, containerConfig, true)
-		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
-		imageContext.currentImageId = dockerApi.commit(runResponse.containerId, commitQuery, true).imageId
-		console.printCommit imageContext.currentImageId
+	def call(String pckage) {
+		Map variables = this.executionContext.variables
+		String pm = variables.currentPackageManager?:findDefaultPackageManager()
+		this.call(pm, pckage)
 	}
 	
-	private String findPackageManager() {
+	def call(String pm, String pckage) {
+		this.call(PackageManager.get(this.executionContext, pm), pckage)
+	}
+	
+	def call(PackageManager pm, String pckage) {
+		pm(pckage)
+	}
+	
+	private String findDefaultPackageManager() {
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
 		containerConfig << [Cmd: buildFindPackageManagerCmd()]
 			
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig)
 		dockerApi.remove(runResponse.containerId)
-		return runResponse.logs[0]
+		String pm = runResponse.logs[0]
+		if(pm == "none") {
+			throw new OperationException("Unable to find the default package manager")
+		}
+		return pm
 	}
 
 	private List<String> buildFindPackageManagerCmd() {
-		String cmd = ""
-		for(String pm in ["apt-get", "yum", "zypper"]) {
-			cmd += "(${pm} --version &>/dev/null && echo \"${pm}\") ||"
-		}
-		cmd += "echo 'none'"
-		return HelperFunctions.buildShellCommand(this.executionContext, cmd)
-	}
-
-	private List<String> buildInstallPackageCmd(String packageManager, String pckge, boolean update = false) {
-		String cmd = "";
-		switch(packageManager) {
-			case "apt-get": 
-				cmd += update ? "apt-get update && " : ""
-				cmd += "apt-get -y install ${pckge}"
-				break
-			case "yum": 
-				cmd += update ? "yum update && " : ""
-				cmd += "yum -y install ${pckge}"
-				break
-			case "zypper":
-				cmd += update ? "zypper update && " : ""
-				cmd += "zypper --non-interactive install ${pckge}"
-				break
-			case "none": 
-				throw new OperationException("Unable to install package. Package manager couldn't be found.")
-		}
-		return HelperFunctions.buildShellCommand(this.executionContext, cmd)
+		List<String> cmds = PackageManager.getAll(this.executionContext)
+										  .entrySet()
+										  .findAll {e -> e.value in OsPackageManager}
+										  .collect { e -> "(" +e.value.getVersionCmd() + " &>/dev/null && echo \"" + e.key + "\")"}
+		cmds << "echo 'none'"
+		return HelperFunctions.buildShellCommand(this.executionContext, cmds.join(" || "))
 	}
 	
 }

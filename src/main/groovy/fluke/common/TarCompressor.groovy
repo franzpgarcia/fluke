@@ -32,7 +32,7 @@ class TarCompressor {
 	def tar(String src) {
 		File file = new File(src)
 		if(!file.exists()) {
-			throw new FileNotFoundException(src)
+			throw new FileNotFoundException("Could not find file or directory at ${src}")
 		}
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream()
 		ArchiveOutputStream tarOutStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.TAR, outStream);

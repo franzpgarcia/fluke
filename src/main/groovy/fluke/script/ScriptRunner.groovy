@@ -3,14 +3,15 @@ package fluke.script
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
+import fluke.common.FlukeEnvironmentVariable;
 import fluke.operation.BuildOperation;
 
 class ScriptRunner {
 	def printErr = System.err.&println
-	
+
 	ScriptRunner() {
 	}
-	
+
 	def runScript(String scriptStr, String build, Map args, boolean force) {
 		String scriptName = "FlukeScript" + Math.abs(new Random().nextInt());
 		try {
@@ -20,13 +21,15 @@ class ScriptRunner {
 			if(build) {
 				scriptExecution.disableBuilds()
 			}
-			script.setDelegate(scriptExecution);
-			script.run();
+			script.setDelegate(scriptExecution)
+			script.run()
 			if(build) {
 				scriptExecution.enableBuilds()
 				scriptExecution.executeOperation(BuildOperation.class, [[image: build]] as Object[])
 			}
 		} catch(Exception e) {
+			boolean enableStackTrace = FlukeEnvironmentVariable.FLUKE_ENABLE_STACKTRACE.getAsBool()
+			if(enableStackTrace) e.printStackTrace()
 			this.handleExecutionException(e, scriptStr, scriptName)
 		}
 	}
@@ -49,7 +52,7 @@ class ScriptRunner {
 		}
 		System.exit(1)
 	}
-	
+
 	private DelegatingScript parseScript(String scriptStr, String scriptName, Map args) {
 		CompilerConfiguration cc = new CompilerConfiguration();
 		cc.setScriptBaseClass(DelegatingScript.class.getName());
@@ -61,7 +64,6 @@ class ScriptRunner {
 			return (DelegatingScript) sh.parse(scriptStr, scriptName)
 		} catch(MultipleCompilationErrorsException e) {
 			printErr e.message.replaceAll("${scriptName}:", "")
-		} 
+		}
 	}
-	
 }

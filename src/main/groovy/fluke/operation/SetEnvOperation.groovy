@@ -1,13 +1,14 @@
 package fluke.operation
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
-@Operation("setenv")
+@AllowedIn(["image", "procedure", "with"])
+@Keyword("setenv")
 class SetEnvOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -18,11 +19,10 @@ class SetEnvOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def setenv(Map<String, String> envs) {
+	def call(Map<String, String> envs) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("ADDING ENVIRONMENT VARIABLES ${envs}"),
+		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand(this.executionContext, "ADDING ENVIRONMENT VARIABLES ${envs}"),
 							Env: envs.collect {k, v -> "${k}=${v}"}]
 		
 		console.printMessage "Setting environment variables ${envs}"

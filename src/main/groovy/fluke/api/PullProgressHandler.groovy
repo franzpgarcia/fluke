@@ -21,20 +21,32 @@ class PullProgressHandler {
 	private static String DIGEST_PREFIX = "Digest: "
 	
 	private PullStatus prevStatus
+	private LinkedHashMap displayedProgress = [Downloading: [:], Extracting: [:]]
 	
 	def handle(Map progressResponse) {
 		if(progressResponse.error) {
 			handleError(progressResponse.error)
 		}
+		handleProgress(progressResponse)
+		//println(displayedProgress)
 		printHeader(progressResponse)
 		printRow(progressResponse)
-		String status = progressResponse.status
 	}
 
 	private void handleError(String error) {
 		throw new DockerApiException(error)
 	}
 	
+	private void handleProgress(Map progressResponse) {
+		if(progressResponse.progress) {
+			String id = progressResponse.id
+			String status = progressResponse.status
+			String progress = progressResponse.progress
+			this.displayedProgress[status][id] = progress
+		}
+	}
+	
+	//TODO Header only prints once for downloading (Maybe show on same line)
 	private void printHeader(Map progressResponse) {
 		PullStatus currentStatus = PullStatus.values().find {it.label == progressResponse.status}
 		if(currentStatus && this.prevStatus != currentStatus) {
@@ -45,6 +57,7 @@ class PullProgressHandler {
 		}
 	}
 
+	//TODO
 	private void printRow(Map progressResponse) {
 		String id = progressResponse.id
 		String str = progressResponse.progress ?: progressResponse.status

@@ -1,12 +1,11 @@
 package fluke.operation
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.Keyword;
 import fluke.common.FlukeConsole;
 import fluke.exception.NotImplementedYetException;
 import fluke.execution.ExecutionContext;
 
-@Operation("onelayer")
+@Keyword("onelayer")
 class OneLayerOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -16,8 +15,7 @@ class OneLayerOperation {
 		this.executionContext = executionContext
 	}
 	
-	@OperationMethod
-	def onelayer(Closure closure) {
+	def call(Closure closure) {
 		throw new NotImplementedYetException()
 	}
 }

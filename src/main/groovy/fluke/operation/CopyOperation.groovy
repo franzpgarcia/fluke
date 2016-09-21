@@ -3,17 +3,20 @@ package fluke.operation
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.management.OperationsException;
+
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.common.TarCompressor;
 import fluke.execution.ExecutionContext;
 
-@Operation("copy")
+@AllowedIn(["image", "procedure", "with"])
+@Keyword("copy")
 class CopyOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -25,11 +28,18 @@ class CopyOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def copy(String source, String dest) {
+	def call(String src) {
+		return new CopyTo(executionContext: executionContext, src: src)
+	}
+	
+	def call(InputStream stream) {
+		return new CopyTo(executionContext: executionContext, stream: stream)
+	}
+	
+	def call(String source, String dest) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("COPYING ${source} TO ${dest}")]
+		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand(this.executionContext, "COPYING ${source} TO ${dest}")]
 		
 		console.printMessage "Copying ${source} to ${dest}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
@@ -39,11 +49,10 @@ class CopyOperation {
 		console.printCommit imageContext.currentImageId
 	}
 
-	@OperationMethod
-	def copy(InputStream stream, String dest) {		
+	def call(InputStream stream, String dest) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("COPYING stream TO ${dest}")]
+		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand(this.executionContext, "COPYING stream TO ${dest}")]
 		
 		console.printMessage "Copying file stream to ${dest}"
 		def containerResponse = dockerApi.createContainer(containerConfig)
@@ -60,5 +69,21 @@ class CopyOperation {
 	private String getParent(String dest) {
 		String path = Paths.get(dest).parent
 		return dest.contains("\\") ? path : path.replace("\\", "/") 
+	}
+
+}
+
+class CopyTo {
+	ExecutionContext executionContext
+	String src
+	InputStream stream
+	
+	def to(String destination) {
+		CopyOperation copyOp = new CopyOperation(this.executionContext)
+		if(src) {
+			copyOp(this.src, destination)
+		} else if(stream) {
+			copyOp(this.stream, destination)
+		}
 	}
 }

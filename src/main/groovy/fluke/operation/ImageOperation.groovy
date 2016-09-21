@@ -8,11 +8,12 @@ import fluke.block.ExecutableBlock;
 import fluke.block.ImageBlock;
 import fluke.common.FlukeConsole;
 import fluke.execution.ExecutionContext;
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.operation.FromOperation;
 
-@Operation("image")
+@AllowedIn("script")
+@Keyword("image")
 class ImageOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -22,15 +23,13 @@ class ImageOperation {
 		this.executionContext = executionContext
 	}
 	
-	@OperationMethod
-	def image(String image, Closure closure) {
+	def call(String image, Closure closure) {
 		this.executionContext.images[image] = new ImageBlock(image: image, block: closure)
 	}
 	
-	@OperationMethod
-	def image(Map<String, Closure> images) {
+	def call(Map<String, Closure> images) {
 		images.each {
-			k, v -> this.image(k, v)
+			k, v -> this.call(k, v)
 		}
 	}
 	

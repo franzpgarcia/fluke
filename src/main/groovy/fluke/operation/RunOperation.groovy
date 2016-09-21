@@ -8,15 +8,16 @@ import org.apache.commons.compress.utils.IOUtils;
 
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.block.ExecutableBlock;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
-@Operation("run")
+@AllowedIn(["image", "procedure", "with"])
+@Keyword("run")
 class RunOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -27,8 +28,7 @@ class RunOperation {
 		this.executionContext = executionContext
 	}
 	
-	@OperationMethod
-	def run(Closure closure, List<String> args) {
+	def call(Closure closure, List<String> args) {
 		List<String> adaptedArgs = closure(this.executionContext, args)
 		ExecutableBlock currentBlock = this.executionContext.currentBlock
 		if(currentBlock.isBlockOf("onelayer")) {
@@ -38,19 +38,16 @@ class RunOperation {
 		}
 	}
 	
-	@OperationMethod
-	def run(Closure closure, String... args) {
-		this.run(closure, args as List)
+	def call(Closure closure, String... args) {
+		this.call(closure, args as List)
 	}
 	
-	@OperationMethod
-	def run(String... args) {
-		this.run(getShellClosure(), args)
+	def call(String... args) {
+		this.call(getShellClosure(), args)
 	}
 	
-	@OperationMethod
-	def run(List<String> args) {
-		this.run(getShellClosure(), args)
+	def call(List<String> args) {
+		this.call(getShellClosure(), args)
 	}
 	
 	private Closure getShellClosure() {

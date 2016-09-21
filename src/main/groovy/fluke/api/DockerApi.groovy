@@ -29,7 +29,7 @@ class DockerApi {
 			result << this.wait(result.containerId)
 			result << this.logs(result.containerId)
 			return result
-		} catch(DockerApiException e) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to run image ${image} with command ${containerConfig.Cmd}")
 		}
 	}
@@ -38,7 +38,7 @@ class DockerApi {
 		try {
 			def waitResponse = dockerClient.wait(containerId)
 			return [statusCode: waitResponse["content"]["StatusCode"]]
-		} catch(DockerApiException e) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Issue while waiting for container ${containerId}")
 		}
 	}
@@ -63,7 +63,7 @@ class DockerApi {
 		try {
 			def commitResponse = dockerClient.commit(containerId, commitQuery)
 			return [imageId: commitResponse["content"]["Id"]]
-		} catch(DockerApiException e) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to commit ${containerId}")
 		} finally {
 			if(deleteAfterCommit) {
@@ -76,7 +76,7 @@ class DockerApi {
 		try {
 			def commitResponse = dockerClient.commit(containerId, commitQuery, commitConfig)
 			return [imageId: commitResponse["content"]["Id"]]
-		} catch(DockerApiException e) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to commit ${containerId}")
 		} finally {
 			if(deleteAfterCommit) {
@@ -89,7 +89,7 @@ class DockerApi {
 		try {
 			def containerResponse = dockerClient.createContainer(containerConfig)
 			return [id: containerResponse["content"]["Id"]]
-		} catch(DockerApiException e) {
+		} catch(DockerClientException e) {
 			throw new DockerApiException("Unable to create container")
 		}
 	}
@@ -97,8 +97,14 @@ class DockerApi {
 	void putArchive(String containerId, String dest, InputStream archiveStream) {
 		try {
 			dockerClient.putArchive(containerId, dest, archiveStream)
-		} catch(DockerApiException e) {
-			throw new DockerApiException("Unable to push file(s) to container ${containerId} in directory ${dest}")
+		} catch(DockerClientException e) {
+			println e?.detail?.status?.code
+			println e?.detail
+			if(e?.detail?.status?.code == 404) {
+				throw new DockerApiException("Could not find directory ${dest}")
+			} else {
+				throw new DockerApiException("Unable to push file(s) to container ${containerId} in directory ${dest}")
+			}
 		}
 	}
 

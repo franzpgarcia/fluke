@@ -2,14 +2,15 @@ package fluke.operation
 
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
-@Operation("from")
+@AllowedIn("image")
+@Keyword("from")
 class FromOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -20,16 +21,14 @@ class FromOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def from(String imageInput) {
+	def call(String imageInput) {
 		String[] imageSplit = imageInput.split(":")
 		String image = imageSplit[0]
 		String tag = imageSplit.size() > 1 ? imageSplit[1]:"latest"
-		this.from([image: image, tag: tag])
+		this.call([image: image, tag: tag])
 	}
 
-	@OperationMethod
-	def from(Map<String, Object> imageMap) {
+	def call(Map<String, Object> imageMap) {
 		Map imageContext = this.executionContext.variables.imageContext
 		
 		if(imageContext.currentImageId) {

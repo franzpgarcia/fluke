@@ -12,6 +12,7 @@ class App {
 
 	static void main(String[] args) {
 		FlukeCli flukeCli = new FlukeCli()
-		flukeCli.handle(args)
+		//flukeCli.handle(args)
+		flukeCli.handle(["-f", "C:\\Users\\Franz\\Desktop\\test.fluke"] as String[])
 	}
 }

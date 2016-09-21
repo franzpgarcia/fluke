@@ -2,14 +2,15 @@ package fluke.operation
 
 import de.gesellix.docker.client.DockerClient;
 import de.gesellix.docker.client.DockerClientImpl;
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
 
-@Operation("port")
+@AllowedIn(["image", "procedure", "with"])
+@Keyword("port")
 class PortOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -20,13 +21,11 @@ class PortOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def port(int port) {
-		this.port(port, "tcp")
+	def call(int port) {
+		this.call(port, "tcp")
 	}
 
-	@OperationMethod
-	def port(int port, String protocol) {
+	def call(int port, String protocol) {
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
 		containerConfig << [Cmd: HelperFunctions.buildNoOpCommand("EXPOSING ${port} ${protocol}"),

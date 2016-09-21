@@ -4,11 +4,15 @@ import java.lang.reflect.Array;
 
 import org.codehaus.groovy.reflection.CachedClass;
 
-import fluke.annotation.OperationMethod;
 import fluke.common.BuiltInFunctions;
-import fluke.exception.InvalidOperationCallException
-import fluke.operation.map.OperationMap;
+import fluke.exception.InvalidCallException;
+import fluke.keyword.KeywordMap;
 
 class BlockExecution implements Execution, BuiltInFunctions {
+
+	KeywordMap keywordMap
 	
+	KeywordMap getKeywordMap() {
+		return this.keywordMap
+	}
 }

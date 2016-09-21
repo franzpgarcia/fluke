@@ -2,12 +2,10 @@ package fluke.block
 
 import java.util.Map;
 
-import fluke.annotation.AllowedOperations;
 import fluke.annotation.Block;
 import fluke.execution.ExecutionContext;
 
 @Block(of="onelayer")
-@AllowedOperations(["run"])
 class OneLayerBlock implements ExecutableBlock {
 	
 	@Override

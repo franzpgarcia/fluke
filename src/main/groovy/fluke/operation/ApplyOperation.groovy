@@ -3,8 +3,8 @@ package fluke.operation;
 import java.nio.file.Paths;
 import java.util.List;
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.api.DockerApi;
 import fluke.block.ProcedureBlock;
 import fluke.block.ImageBlock;
@@ -15,7 +15,8 @@ import fluke.exception.NotImplementedYetException;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 
-@Operation("apply")
+@AllowedIn("script")
+@Keyword("apply")
 class ApplyOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -26,8 +27,7 @@ class ApplyOperation {
 		this.executionContext = executionContext
 	}
 
-	@OperationMethod
-	def apply(Map<String, Object> apply) {
+	def call(Map<String, Object> apply) {
 		applyBuild(apply)
 		applyScript(apply)
 	}
@@ -42,7 +42,7 @@ class ApplyOperation {
 				procedureBlock = new ProcedureBlock(block: procedure)
 			}
 			if(procedureBlock) {
-				procedureBlock.eval(this.executionContext)
+				procedureBlock(this.executionContext)
 			} else {
 				throw new OperationException("Procedure ${procedure} not defined")
 			}

@@ -34,8 +34,5 @@ trait BuiltInFunctions {
 	Map config(InputStream stream) {
 		return new ConfigSlurper().parse(stream.readLines().join("\n"))
 	}
-	
-	def shell = {
-		executionContext, cmd -> HelperFunctions.buildShellCommand(executionContext, cmd)
-	}
+
 }

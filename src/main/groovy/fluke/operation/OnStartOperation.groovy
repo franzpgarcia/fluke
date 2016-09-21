@@ -1,11 +1,12 @@
 package fluke.operation;
 
-import fluke.annotation.Operation;
-import fluke.annotation.OperationMethod;
+import fluke.annotation.AllowedIn;
+import fluke.annotation.Keyword;
 import fluke.common.FlukeConsole;
 import fluke.execution.ExecutionContext;
 
-@Operation("onstart")
+@AllowedIn("image")
+@Keyword("onstart")
 public class OnStartOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -15,8 +16,7 @@ public class OnStartOperation {
 		this.executionContext = executionContext
 	}
 	
-	@OperationMethod
-	def onstart(Map onstart) {
+	def call(Map onstart) {
 		//TODO validation
 		def imageContext = this.executionContext.variables["imageContext"] 
 		imageContext.onstart = imageContext.onstart?:[:]
