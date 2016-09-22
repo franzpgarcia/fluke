@@ -1,6 +1,6 @@
-package fluke.definition
+package fluke.core.block
 
-trait Definition {
+class BlockDefinition {
 	String name
 	Map params
 	Closure closure

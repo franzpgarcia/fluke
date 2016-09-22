@@ -5,6 +5,6 @@ import fluke.core.block.ExecutableBlock;
 import fluke.core.execution.ExecutionContext;
 
 //@Block(of="registry")
-class RegistryBlock implements ExecutableBlock {
+class RegistryBlock extends ExecutableBlock {
 	
 }

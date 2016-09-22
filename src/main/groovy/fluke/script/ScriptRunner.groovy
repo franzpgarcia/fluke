@@ -67,4 +67,5 @@ class ScriptRunner {
 			printErr e.message.replaceAll("${scriptName}:", "")
 		}
 	}
+	
 }

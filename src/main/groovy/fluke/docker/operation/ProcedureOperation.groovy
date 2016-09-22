@@ -7,10 +7,10 @@ import java.util.Map;
 
 import fluke.core.annotation.AllowedIn;
 import fluke.core.annotation.Keyword;
+import fluke.core.block.BlockDefinition;
 import fluke.core.common.FlukeConsole;
 import fluke.core.execution.ExecutionContext;
 import fluke.core.keyword.Keywords;
-import fluke.definition.Definition;
 import fluke.docker.block.ProcedureBlock;
 
 @AllowedIn([Keywords.FLUKE, Keywords.IMAGE])
@@ -24,7 +24,7 @@ class ProcedureOperation {
 		this.executionContext = executionContext
 	}
 	
-	def call(Definition definition) {
+	def call(BlockDefinition definition) {
 		this.call(definition.name, definition.closure)
 	}
 	

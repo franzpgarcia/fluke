@@ -6,7 +6,7 @@ import fluke.core.execution.ExecutionContext;
 import fluke.core.keyword.Keywords;
 
 @Block(of=Keywords.WITH)
-class WithBlock implements ExecutableBlock {
+class WithBlock extends ExecutableBlock {
 	String user
 	String directory
 	

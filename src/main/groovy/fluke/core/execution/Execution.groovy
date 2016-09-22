@@ -6,10 +6,9 @@ import java.lang.reflect.Array;
 
 import org.codehaus.groovy.reflection.CachedClass;
 
+import fluke.core.block.BlockDefinition;
 import fluke.core.exception.InvalidCallException;
 import fluke.core.keyword.KeywordMap;
-import fluke.definition.Definition;
-import fluke.definition.DefinitionImpl
 
 trait Execution {
 	Object outer
@@ -21,7 +20,7 @@ trait Execution {
 			Object callable = callableClass.newInstance(this.getExecutionContext())
 			return callable(*args)
 		} else {
-			def definition = getDefinition(name, (args?:[]) as List)
+			def definition = getBlockDefinition(name, (args?:[]) as List)
 			if(definition) {
 				return definition
 			} else {
@@ -41,7 +40,7 @@ trait Execution {
 		}
 	}
 
-	private Definition getDefinition(String name, List args) {
+	private BlockDefinition getBlockDefinition(String name, List args) {
 		List argsClasses = args.collect { it.getClass() }
 		def allIn = { classes ->
 			[argsClasses, classes].transpose().every {
@@ -49,9 +48,9 @@ trait Execution {
 			} && argsClasses.size() == classes.size()
 		}
 		if(allIn([Map, Closure]) && args[0].values().every { it instanceof Class }) {
-			return new DefinitionImpl(name: name, params: args[0], closure: args[1])
+			return new BlockDefinition(name: name, params: args[0], closure: args[1])
 		} else if(allIn([Closure])) {
-			return new DefinitionImpl(name: name, params: [:], closure: args[0])
+			return new BlockDefinition(name: name, params: [:], closure: args[0])
 		}
 		return null
 	}

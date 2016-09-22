@@ -8,7 +8,7 @@ import fluke.core.exception.InvalidCallException;
 import fluke.core.keyword.KeywordMap;
 import fluke.docker.common.BuiltInFunctions;
 
-class BlockExecution implements Execution, BuiltInFunctions {
+class BlockExecution implements Execution {
 
 	KeywordMap keywordMap
 	

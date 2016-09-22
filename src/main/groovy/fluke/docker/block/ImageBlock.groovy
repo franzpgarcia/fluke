@@ -16,7 +16,7 @@ import fluke.docker.block.ProcedureBlock;
 import fluke.docker.common.HelperFunctions;
 
 @Block(of=Keywords.IMAGE)
-class ImageBlock implements ExecutableBlock {
+class ImageBlock extends ExecutableBlock {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
 	String image

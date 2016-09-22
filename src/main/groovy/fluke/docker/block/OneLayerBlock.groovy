@@ -7,7 +7,7 @@ import fluke.core.block.ExecutableBlock;
 import fluke.core.execution.ExecutionContext;
 
 //@Block(of="onelayer")
-class OneLayerBlock implements ExecutableBlock {
+class OneLayerBlock extends ExecutableBlock {
 	
 	@Override
 	def beforeExecute(ExecutionContext executionContext) {
