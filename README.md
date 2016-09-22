@@ -14,31 +14,31 @@ Options
 
 # Example of build file
 ```groovy
-procedure adddirectory: {
+proc adddirectory(path:String) {
   with user: root {
-    run shell, "mkdir", "/home/test"
+      shell "mkdir", path
   }
 }
 	
-image custom_ubuntu: {
-	from image: "ubuntu"
+image custom_ubuntu {
+	from "ubuntu"
 
 	maintainer = "Franz Garcia"
 	labels = ["version": "0.1"]
 	
-	apply procedure: "adddirectory"
+	apply adddirectory("/home/test")
 	
-	run shell, "mkdir", "/blah1"
+	shell "ls", "-la"
 	with directory: "/home/test", {
-		run shell, "touch", "hello.text"
+		shell "touch", "hello.text"
 	}
 	port 22
 	volume "~/bla"
 	
-	onstart entrypoint: "/home/test.sh", parameters: ["-d", "/home/test"]
+	onstart "/home/test.sh", "-d", "/home/test"
 }
 
-build image: "custom_ubuntu"
+build custom_ubuntu
 ```
 
 # License
