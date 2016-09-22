@@ -1,10 +1,10 @@
 package fluke.script
 
-import fluke.core.execution.Execution;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.KeywordMap;
-import fluke.core.keyword.Keywords;
-import fluke.docker.common.BuiltInFunctions;
+import fluke.core.execution.Execution
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.KeywordMap
+import fluke.core.keyword.Keywords
+import fluke.docker.common.BuiltInFunctions
 
 class ScriptExecution implements Execution, BuiltInFunctions {
 

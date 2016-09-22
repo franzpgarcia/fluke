@@ -1,8 +1,8 @@
 package fluke.docker.common
 
-import fluke.core.exception.OperationException;
-import fluke.core.execution.ExecutionContext;
-import fluke.docker.shell.DefaultShell;
+import fluke.core.exception.OperationException
+import fluke.core.execution.ExecutionContext
+import fluke.docker.shell.DefaultShell
 
 final class HelperFunctions {
 	

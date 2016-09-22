@@ -1,9 +1,9 @@
 package fluke.docker.block
 
-import fluke.core.annotation.Block;
-import fluke.core.block.ExecutableBlock;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
+import fluke.core.annotation.Block
+import fluke.core.block.ExecutableBlock
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
 
 @Block(of=Keywords.WITH)
 class WithBlock extends ExecutableBlock {

@@ -1,19 +1,12 @@
 package fluke.docker.block
 
-import groovy.lang.Closure;
-
-import java.util.Map;
-
-import de.gesellix.docker.client.DockerClient;
-import de.gesellix.docker.client.DockerClientImpl;
-import fluke.core.annotation.Block;
-import fluke.core.block.ExecutableBlock;
-import fluke.core.common.FlukeConsole;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.api.DockerApi;
-import fluke.docker.block.ProcedureBlock;
-import fluke.docker.common.HelperFunctions;
+import fluke.core.annotation.Block
+import fluke.core.block.ExecutableBlock
+import fluke.core.common.FlukeConsole
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.api.DockerApi
+import fluke.docker.common.HelperFunctions
 
 @Block(of=Keywords.IMAGE)
 class ImageBlock extends ExecutableBlock {

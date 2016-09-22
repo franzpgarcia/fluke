@@ -1,13 +1,12 @@
 package fluke.docker.api
 
-import de.gesellix.docker.client.DockerAsyncCallback;
-import de.gesellix.docker.client.DockerClient;
-import de.gesellix.docker.client.DockerClientException;
-import de.gesellix.docker.client.DockerClientImpl;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.OperationException;
-import fluke.docker.exception.DockerApiException;
-import groovy.json.JsonSlurper;
+import de.gesellix.docker.client.DockerAsyncCallback
+import de.gesellix.docker.client.DockerClient
+import de.gesellix.docker.client.DockerClientException
+import de.gesellix.docker.client.DockerClientImpl
+import fluke.core.common.FlukeConsole
+import fluke.docker.exception.DockerApiException
+import groovy.json.JsonSlurper
 
 class DockerApi {
 	private static FlukeConsole console = FlukeConsole.getConsole()

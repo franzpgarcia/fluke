@@ -1,18 +1,16 @@
 package fluke.docker.operation
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.InvalidCallException;
-import fluke.core.exception.NotImplementedYetException;
-import fluke.core.exception.OperationException;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.api.DockerApi;
-import fluke.docker.common.HelperFunctions;
-import fluke.docker.packagemanager.OsPackageManager;
-import fluke.docker.packagemanager.PackageManager;
-import fluke.docker.shell.Bash;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.exception.OperationException
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.api.DockerApi
+import fluke.docker.common.HelperFunctions
+import fluke.docker.packagemanager.OsPackageManager
+import fluke.docker.packagemanager.PackageManager
+import fluke.docker.shell.Bash
 
 @AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
 @Keyword(Keywords.INSTALL)

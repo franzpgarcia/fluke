@@ -1,9 +1,7 @@
 package fluke.docker.shell
 
-import java.util.List;
-
-import fluke.core.annotation.Keyword;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.annotation.Keyword
+import fluke.core.execution.ExecutionContext
 
 @Keyword("sh")
 class Sh extends Shell {

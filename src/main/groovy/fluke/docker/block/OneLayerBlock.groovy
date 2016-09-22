@@ -1,10 +1,7 @@
 package fluke.docker.block
 
-import java.util.Map;
-
-import fluke.core.annotation.Block;
-import fluke.core.block.ExecutableBlock;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.block.ExecutableBlock
+import fluke.core.execution.ExecutionContext
 
 //@Block(of="onelayer")
 class OneLayerBlock extends ExecutableBlock {

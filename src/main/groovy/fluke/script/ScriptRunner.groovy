@@ -1,11 +1,11 @@
 package fluke.script
 
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
-import fluke.core.common.FlukeEnvironmentVariable;
-import fluke.core.execution.ExecutionContext;
-import fluke.docker.operation.BuildOperation;
+import fluke.core.common.FlukeEnvironmentVariable
+import fluke.core.execution.ExecutionContext
+import fluke.docker.operation.BuildOperation
 
 class ScriptRunner {
 	def printErr = System.err.&println
@@ -14,7 +14,7 @@ class ScriptRunner {
 	}
 
 	def runScript(String scriptStr, String build, Map args, boolean force) {
-		String scriptName = "FlukeScript" + Math.abs(new Random().nextInt());
+		String scriptName = "FlukeScript" + Math.abs(new Random().nextInt())
 		try {
 			DelegatingScript script = (DelegatingScript) this.parseScript(scriptStr, scriptName, args)
 			ScriptExecution scriptExecution = new ScriptExecution(outer: this, executionContext: [procedures:[:], images:[:]] as ExecutionContext)
@@ -55,12 +55,12 @@ class ScriptRunner {
 	}
 
 	private DelegatingScript parseScript(String scriptStr, String scriptName, Map args) {
-		CompilerConfiguration cc = new CompilerConfiguration();
-		cc.setScriptBaseClass(DelegatingScript.class.getName());
+		CompilerConfiguration cc = new CompilerConfiguration()
+		cc.setScriptBaseClass(DelegatingScript.class.getName())
 		Binding binding = new Binding()
 		binding.setVariable("myargs", args)
 		binding.setVariable("myenv", System.getenv())
-		GroovyShell sh = new GroovyShell(this.class.getClassLoader(),binding,cc);
+		GroovyShell sh = new GroovyShell(this.class.getClassLoader(),binding,cc)
 		try {
 			return (DelegatingScript) sh.parse(scriptStr, scriptName)
 		} catch(MultipleCompilationErrorsException e) {

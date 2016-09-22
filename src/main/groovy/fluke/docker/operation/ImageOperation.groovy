@@ -1,18 +1,12 @@
 package fluke.docker.operation
 
-import groovy.lang.Closure;
-
-import java.util.Map;
-
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.block.BlockDefinition;
-import fluke.core.block.ExecutableBlock;
-import fluke.core.common.FlukeConsole;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.block.ImageBlock;
-import fluke.docker.operation.FromOperation;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.block.BlockDefinition
+import fluke.core.common.FlukeConsole
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.block.ImageBlock
 
 @AllowedIn(Keywords.FLUKE)
 @Keyword(Keywords.IMAGE)

@@ -1,21 +1,17 @@
-package fluke.docker.operation;
+package fluke.docker.operation
 
-import java.nio.file.Paths;
-import java.util.List;
+import java.nio.file.Paths
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.NotImplementedYetException;
-import fluke.core.exception.OperationException;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.api.DockerApi;
-import fluke.docker.block.ImageBlock;
-import fluke.docker.block.ProcedureBlock;
-import fluke.docker.common.BuiltInFunctions;
-import fluke.docker.common.HelperFunctions;
-import fluke.docker.shell.DefaultShell;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.exception.OperationException
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.api.DockerApi
+import fluke.docker.block.ProcedureBlock
+import fluke.docker.common.HelperFunctions
+import fluke.docker.shell.DefaultShell
 
 @AllowedIn(Keywords.FLUKE)
 @Keyword(Keywords.APPLY)

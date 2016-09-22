@@ -1,8 +1,7 @@
 package fluke.docker.packagemanager
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.annotation.Keyword
+import fluke.core.execution.ExecutionContext
 
 @Keyword("gem")
 class RubyGem extends PackageManager {

@@ -1,8 +1,7 @@
 package fluke.docker.packagemanager
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.annotation.Keyword
+import fluke.core.execution.ExecutionContext
 
 @Keyword("npm")
 class Npm extends PackageManager {
@@ -13,7 +12,7 @@ class Npm extends PackageManager {
 	
 	@Override
 	public String getUpdateRepositoriesCmd() {
-		return null;
+		return null
 	}
 
 	@Override

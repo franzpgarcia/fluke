@@ -1,14 +1,7 @@
 package fluke.core.execution
 
-import groovy.lang.MetaMethod;
-
-import java.lang.reflect.Array;
-
-import org.codehaus.groovy.reflection.CachedClass;
-
-import fluke.core.block.BlockDefinition;
-import fluke.core.exception.InvalidCallException;
-import fluke.core.keyword.KeywordMap;
+import fluke.core.block.BlockDefinition
+import fluke.core.keyword.KeywordMap
 
 trait Execution {
 	Object outer

@@ -1,18 +1,15 @@
 package fluke.docker.packagemanager
 
-import java.util.List;
+import org.reflections.Reflections
 
-import org.reflections.Reflections;
-import org.reflections.ReflectionsException;
-
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.execution.ExecutionContext;
-import fluke.docker.api.DockerApi;
-import fluke.docker.common.HelperFunctions;
-import fluke.docker.exception.InvalidPackageManagerException;
-import fluke.docker.shell.Bash;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.execution.ExecutionContext
+import fluke.docker.api.DockerApi
+import fluke.docker.common.HelperFunctions
+import fluke.docker.exception.InvalidPackageManagerException
+import fluke.docker.shell.Bash
 
 @AllowedIn(["image", "procedure", "with"])
 abstract class PackageManager {
@@ -21,7 +18,7 @@ abstract class PackageManager {
 	private static final Map<String, Class> pmClasses
 	
 	static {
-		Reflections reflections = new Reflections("fluke.docker.packagemanager");
+		Reflections reflections = new Reflections("fluke.docker.packagemanager")
 		pmClasses = reflections.getTypesAnnotatedWith(Keyword.class).collectEntries {
 			[(it.getAnnotation(Keyword.class).value()): it]
 		}.asImmutable()

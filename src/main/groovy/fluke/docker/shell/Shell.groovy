@@ -1,22 +1,19 @@
 package fluke.docker.shell
 
-import java.util.Map;
+import org.reflections.Reflections
 
-import org.reflections.Reflections;
-
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.execution.ExecutionContext;
-import fluke.docker.exception.InvalidShellException;
-import fluke.docker.operation.RunOperation;
-import fluke.docker.packagemanager.PackageManager;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.execution.ExecutionContext
+import fluke.docker.exception.InvalidShellException
+import fluke.docker.operation.RunOperation
 
 @AllowedIn(["image", "procedure", "with"])
 abstract class Shell {
 	private static final Map<String, Class> shellClasses
 	
 	static {
-		Reflections reflections = new Reflections("fluke.shell");
+		Reflections reflections = new Reflections("fluke.shell")
 		shellClasses = reflections.getTypesAnnotatedWith(Keyword.class).collectEntries {
 			[(it.getAnnotation(Keyword.class).value()): it]
 		}.asImmutable()

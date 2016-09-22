@@ -1,14 +1,12 @@
 package fluke.docker.operation
 
-import de.gesellix.docker.client.DockerClient;
-import de.gesellix.docker.client.DockerClientImpl;
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.OperationException;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.api.DockerApi;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.exception.OperationException
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.api.DockerApi
 
 @AllowedIn(Keywords.IMAGE)
 @Keyword(Keywords.FROM)

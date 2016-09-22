@@ -1,10 +1,10 @@
-package fluke.docker.operation;
+package fluke.docker.operation
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
 
 @AllowedIn(Keywords.IMAGE)
 @Keyword(Keywords.ONSTART)

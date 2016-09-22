@@ -1,9 +1,8 @@
 package fluke.docker.operation
 
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.NotImplementedYetException;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.common.FlukeConsole
+import fluke.core.exception.NotImplementedYetException
+import fluke.core.execution.ExecutionContext
 
 //@Keyword("onelayer")
 class OneLayerOperation {

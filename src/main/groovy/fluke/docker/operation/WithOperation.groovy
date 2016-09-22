@@ -1,14 +1,13 @@
 package fluke.docker.operation
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.common.FlukeConsole;
-import fluke.core.exception.OperationException;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.Keywords;
-import fluke.docker.block.WithBlock;
-import fluke.docker.packagemanager.PackageManager;
-import fluke.docker.shell.Shell;
+import fluke.core.annotation.AllowedIn
+import fluke.core.annotation.Keyword
+import fluke.core.common.FlukeConsole
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.Keywords
+import fluke.docker.block.WithBlock
+import fluke.docker.packagemanager.PackageManager
+import fluke.docker.shell.Shell
 
 @AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
 @Keyword(Keywords.WITH)

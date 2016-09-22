@@ -3,10 +3,6 @@ package fluke.docker.common
 import groovy.text.SimpleTemplateEngine
 import groovy.text.Template
 
-import java.io.InputStream;
-import java.util.Map;
-import java.io.StringWriter;
-import java.io.ByteArrayInputStream
 trait BuiltInFunctions {
 	private SimpleTemplateEngine templateEngine = new SimpleTemplateEngine()
 	

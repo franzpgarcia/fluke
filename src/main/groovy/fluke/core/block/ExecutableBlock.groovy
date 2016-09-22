@@ -1,14 +1,9 @@
 package fluke.core.block
 
-import groovy.lang.Closure;
-
-import java.util.LinkedHashMap;
-
-import fluke.core.annotation.Block;
-import fluke.core.exception.InvalidCallException;
-import fluke.core.execution.BlockExecution;
-import fluke.core.execution.ExecutionContext;
-import fluke.core.keyword.KeywordMap;
+import fluke.core.annotation.Block
+import fluke.core.execution.BlockExecution
+import fluke.core.execution.ExecutionContext
+import fluke.core.keyword.KeywordMap
 
 class ExecutableBlock extends BlockDefinition {
 	

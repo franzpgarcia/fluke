@@ -1,8 +1,6 @@
 package fluke.docker.packagemanager
 
-import fluke.core.annotation.AllowedIn;
-import fluke.core.annotation.Keyword;
-import fluke.core.execution.ExecutionContext;
+import fluke.core.execution.ExecutionContext
 
 //@Keyword("emerge")
 class Portage extends OsPackageManager {
@@ -15,17 +13,17 @@ class Portage extends OsPackageManager {
 	
 	@Override
 	public String getUpdateRepositoriesCmd() {
-		return null;
+		return null
 	}
 
 	@Override
 	public String getVersionCmd() {
-		return null;
+		return null
 	}
 
 	@Override
 	public String getInstallPackageCmd(String... pckageArgs) {
-		return null;
+		return null
 	}
 
 }
