@@ -8,13 +8,13 @@ import fluke.annotation.Block;
 import fluke.exception.InvalidCallException
 import fluke.execution.BlockExecution
 import fluke.execution.ExecutionContext;
+import fluke.definition.Definition;
 import fluke.keyword.KeywordMap;
 
-trait ExecutableBlock {
-	Closure block
+trait ExecutableBlock extends Definition {
 	
 	def call(ExecutionContext executionContext) {
-		def clone = block.clone()
+		def clone = this.closure.clone()
 		beforeExecute(executionContext)
 		
 		def executionContextCopy = executionContext.copy()

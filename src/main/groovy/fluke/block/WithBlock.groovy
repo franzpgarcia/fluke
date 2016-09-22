@@ -2,8 +2,9 @@ package fluke.block
 
 import fluke.annotation.Block;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@Block(of="with")
+@Block(of=Keywords.WITH)
 class WithBlock implements ExecutableBlock {
 	String user
 	String directory

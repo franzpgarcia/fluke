@@ -7,9 +7,10 @@ import fluke.block.ImageBlock;
 import fluke.common.FlukeConsole;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn("script")
-@Keyword("build")
+@AllowedIn(Keywords.FLUKE)
+@Keyword(Keywords.BUILD)
 class BuildOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

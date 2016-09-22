@@ -9,12 +9,13 @@ import fluke.exception.InvalidCallException;
 import fluke.exception.NotImplementedYetException;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 import fluke.packagemanager.OsPackageManager;
 import fluke.packagemanager.PackageManager;
 import fluke.shell.Bash;
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("install")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.INSTALL)
 class InstallOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

@@ -8,9 +8,10 @@ import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn("image")
-@Keyword("from")
+@AllowedIn(Keywords.IMAGE)
+@Keyword(Keywords.FROM)
 class FromOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

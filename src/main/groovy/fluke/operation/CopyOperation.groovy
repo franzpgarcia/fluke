@@ -14,9 +14,10 @@ import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.common.TarCompressor;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("copy")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.COPY)
 class CopyOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

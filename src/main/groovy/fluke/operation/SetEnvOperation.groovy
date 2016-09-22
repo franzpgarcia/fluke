@@ -6,9 +6,10 @@ import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("setenv")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.SETENV)
 class SetEnvOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

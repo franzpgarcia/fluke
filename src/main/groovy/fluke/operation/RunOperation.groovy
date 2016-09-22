@@ -15,9 +15,10 @@ import fluke.block.ExecutableBlock;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("run")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.RUN)
 class RunOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -31,11 +32,7 @@ class RunOperation {
 	def call(Closure closure, List<String> args) {
 		List<String> adaptedArgs = closure(this.executionContext, args)
 		ExecutableBlock currentBlock = this.executionContext.currentBlock
-		if(currentBlock.isBlockOf("onelayer")) {
-			delayedRun(adaptedArgs)
-		} else {
-			runNow(adaptedArgs)
-		}
+		runNow(adaptedArgs)
 	}
 	
 	def call(Closure closure, String... args) {

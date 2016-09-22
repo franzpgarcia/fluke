@@ -8,6 +8,8 @@ import fluke.keyword.KeywordMap;
 
 import org.codehaus.groovy.reflection.CachedClass;
 
+import fluke.definition.Definition;
+import fluke.definition.DefinitionImpl
 import fluke.exception.InvalidCallException;
 
 trait Execution {
@@ -21,8 +23,13 @@ trait Execution {
 			Object callable = callableClass.newInstance(this.getExecutionContext())
 			return callable(*args)
 		} else {
-			//might not work with closures
-			return this.outer.invokeMethod(name, args)
+			def definition = getDefinition(name, args as List)
+			if(definition) {
+				return definition
+			} else {
+				//might not work with closures
+				return this.outer.invokeMethod(name, args)
+			}
 		}
 	}
 
@@ -35,6 +42,21 @@ trait Execution {
 			return this.outer[name]
 		}
 	}
-	
+
+	private Definition getDefinition(String name, List args) {
+		List argsClasses = args.collect { it.getClass() }
+		def allIn = { classes ->
+			[argsClasses, classes].transpose().every {
+				it[0] in it[1]
+			}
+		}
+		if(allIn([Map, Closure]) && args[0].values().every { it instanceof Class }) {
+			return new DefinitionImpl(name: name, params: args[0], closure: args[1])
+		} else if(allIn([Closure])) {
+			return new DefinitionImpl(name: name, params: [:], closure: args[0])
+		}
+		return null
+	}
+
 	abstract KeywordMap getKeywordMap()
 }

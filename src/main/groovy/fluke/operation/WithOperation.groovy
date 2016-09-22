@@ -6,11 +6,12 @@ import fluke.block.WithBlock;
 import fluke.common.FlukeConsole;
 import fluke.exception.OperationException
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 import fluke.packagemanager.PackageManager;
 import fluke.shell.Shell
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("with")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.WITH)
 class WithOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -28,7 +29,7 @@ class WithOperation {
 	}
 	
 	def call(Map<String, String> useMap, Closure closure) {
-		WithBlock withBlock = new WithBlock(block: closure, user: useMap.user, directory: useMap.directory)
+		WithBlock withBlock = new WithBlock(closure: closure, user: useMap.user, directory: useMap.directory)
 		withBlock(this.executionContext)
 	}
 	

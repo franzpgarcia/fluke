@@ -4,6 +4,7 @@ import fluke.common.BuiltInFunctions;
 import fluke.execution.Execution;
 import fluke.execution.ExecutionContext;
 import fluke.keyword.KeywordMap;
+import fluke.keyword.Keywords;
 
 class ScriptExecution implements Execution, BuiltInFunctions {
 
@@ -22,6 +23,6 @@ class ScriptExecution implements Execution, BuiltInFunctions {
 	}
 	
 	KeywordMap getKeywordMap() {
-		return new KeywordMap("script")
+		return new KeywordMap(Keywords.FLUKE)
 	}
 }

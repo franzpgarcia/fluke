@@ -12,8 +12,9 @@ import fluke.block.ProcedureBlock;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@Block(of="image")
+@Block(of=Keywords.IMAGE)
 class ImageBlock implements ExecutableBlock {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

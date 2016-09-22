@@ -5,7 +5,7 @@ import fluke.common.FlukeConsole;
 import fluke.exception.NotImplementedYetException;
 import fluke.execution.ExecutionContext;
 
-@Keyword("registry")
+//@Keyword("registry")
 class RegistryOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

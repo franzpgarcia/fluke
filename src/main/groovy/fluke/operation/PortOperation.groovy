@@ -8,9 +8,10 @@ import fluke.api.DockerApi;
 import fluke.common.FlukeConsole;
 import fluke.common.HelperFunctions;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn(["image", "procedure", "with"])
-@Keyword("port")
+@AllowedIn([Keywords.IMAGE, Keywords.PROCEDURE, Keywords.WITH])
+@Keyword(Keywords.PORT)
 class PortOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

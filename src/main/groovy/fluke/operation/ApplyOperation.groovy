@@ -14,9 +14,10 @@ import fluke.common.HelperFunctions;
 import fluke.exception.NotImplementedYetException;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn("script")
-@Keyword("apply")
+@AllowedIn(Keywords.FLUKE)
+@Keyword(Keywords.APPLY)
 class ApplyOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	

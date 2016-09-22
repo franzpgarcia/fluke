@@ -4,9 +4,10 @@ import fluke.annotation.AllowedIn;
 import fluke.annotation.Keyword;
 import fluke.common.FlukeConsole;
 import fluke.execution.ExecutionContext;
+import fluke.keyword.Keywords;
 
-@AllowedIn("image")
-@Keyword("onstart")
+@AllowedIn(Keywords.IMAGE)
+@Keyword(Keywords.ONSTART)
 public class OnStartOperation {
 	private static FlukeConsole console = FlukeConsole.getConsole()
 	
@@ -16,10 +17,13 @@ public class OnStartOperation {
 		this.executionContext = executionContext
 	}
 	
-	def call(Map onstart) {
+	def call(String entrypoint, String... parameters) {
 		//TODO validation
 		def imageContext = this.executionContext.variables["imageContext"] 
-		imageContext.onstart = imageContext.onstart?:[:]
-		imageContext.onstart << onstart
+		imageContext.onstart = [entrypoint: entrypoint, parameters: parameters]
+	}
+	
+	def call(Map onstart) {
+		this.call(onstart.entrypoint, onstart.parameters)
 	}
 }

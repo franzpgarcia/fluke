@@ -1,8 +1,9 @@
 package fluke.block
 
 import fluke.annotation.Block;
+import fluke.keyword.Keywords;
 
-@Block(of="procedure")
+@Block(of=Keywords.PROCEDURE)
 class ProcedureBlock implements ExecutableBlock {
 
 }
