@@ -2,25 +2,12 @@ package fluke.common
 
 import fluke.exception.OperationException
 import fluke.execution.ExecutionContext;
+import fluke.shell.DefaultShell;
 
 final class HelperFunctions {
-	public static final String DEFAULT_SHELL = "sh"
 	
-	public static List<String> buildShellCommand(ExecutionContext executionContext, List<String> args) {
-		buildShellCommand(executionContext, args.join(" "))
-	}
-	
-	public static List<String> buildShellCommand(ExecutionContext executionContext, String cmd) {
-		String name = executionContext.variables.currentShell?:HelperFunctions.DEFAULT_SHELL
-		switch(name) {
-			case "bash": return ["/bin/bash", "-c", cmd]
-			case "sh": return ["/bin/sh", "-c", cmd]
-		}
-		return [name, cmd]
-	}
-
 	public static List<String> buildNoOpCommand(ExecutionContext executionContext, String cmd) {
-		return buildShellCommand(executionContext, "#(noop) ${cmd}")
+		return new DefaultShell(executionContext).buildShellCmd("#(noop) ${cmd}")
 	}
 
 	public static Map buildContainerConfig(ExecutionContext executionContext) {

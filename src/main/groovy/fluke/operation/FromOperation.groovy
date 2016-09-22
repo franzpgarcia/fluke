@@ -39,6 +39,7 @@ class FromOperation {
 		console.printMessage "Pulling ${imageMap.image}:${imageMap.tag}"
 		def pullResponse = dockerApi.pull(imageMap.image, imageMap.tag)
 		imageContext.currentImageId = pullResponse.id
+		imageContext.fromImageId = pullResponse.id
 		console.printCommit imageContext.currentImageId
 	}
 }

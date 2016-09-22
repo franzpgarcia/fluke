@@ -13,7 +13,6 @@ import fluke.definition.DefinitionImpl
 import fluke.exception.InvalidCallException;
 
 trait Execution {
-	String blockName
 	Object outer
 	ExecutionContext executionContext
 
@@ -23,7 +22,7 @@ trait Execution {
 			Object callable = callableClass.newInstance(this.getExecutionContext())
 			return callable(*args)
 		} else {
-			def definition = getDefinition(name, args as List)
+			def definition = getDefinition(name, (args?:[]) as List)
 			if(definition) {
 				return definition
 			} else {
@@ -48,7 +47,7 @@ trait Execution {
 		def allIn = { classes ->
 			[argsClasses, classes].transpose().every {
 				it[0] in it[1]
-			}
+			} && argsClasses.size() == classes.size()
 		}
 		if(allIn([Map, Closure]) && args[0].values().every { it instanceof Class }) {
 			return new DefinitionImpl(name: name, params: args[0], closure: args[1])

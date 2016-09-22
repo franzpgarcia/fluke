@@ -20,11 +20,9 @@ trait ExecutableBlock extends Definition {
 		def executionContextCopy = executionContext.copy()
 		executionContextCopy.currentBlock = this
 		
-		String blockOf = getBlockOf()
 		clone.delegate = new BlockExecution(outer: this, 
-											blockName: blockOf,
 											executionContext: executionContextCopy, 
-											keywordMap: new KeywordMap(blockOf))
+											keywordMap: new KeywordMap(getBlockOf()))
 		clone.resolveStrategy = Closure.DELEGATE_FIRST
 		try {
 			clone()

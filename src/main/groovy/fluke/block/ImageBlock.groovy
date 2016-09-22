@@ -34,7 +34,7 @@ class ImageBlock implements ExecutableBlock {
 	@Override
 	def onError(Exception error, ExecutionContext executionContext) {
 		Map imageContext = executionContext.variables.imageContext
-		if(imageContext.currentImageId) {
+		if(imageContext.currentImageId && imageContext.fromImageId != imageContext.currentImageId) {
 			dockerApi.rmi(imageContext.currentImageId)
 		}
 		throw error

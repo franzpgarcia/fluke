@@ -29,29 +29,12 @@ class RunOperation {
 		this.executionContext = executionContext
 	}
 	
-	def call(Closure closure, List<String> args) {
-		List<String> adaptedArgs = closure(this.executionContext, args)
-		ExecutableBlock currentBlock = this.executionContext.currentBlock
-		runNow(adaptedArgs)
-	}
-	
-	def call(Closure closure, String... args) {
-		this.call(closure, args as List)
-	}
-	
 	def call(String... args) {
-		this.call(getShellClosure(), args)
+		runNow(args)
 	}
 	
 	def call(List<String> args) {
-		this.call(getShellClosure(), args)
-	}
-	
-	private Closure getShellClosure() {
-		if(this.executionContext.variables.currentShell) {
-			return HelperFunctions.&buildShellCommand
-		}
-		return {ctx, i -> i}
+		this.call(*args)
 	}
 	
 	def runNow(List<String> args) {

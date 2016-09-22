@@ -15,6 +15,7 @@ import fluke.exception.NotImplementedYetException;
 import fluke.exception.OperationException;
 import fluke.execution.ExecutionContext;
 import fluke.keyword.Keywords;
+import fluke.shell.DefaultShell;
 
 @AllowedIn(Keywords.FLUKE)
 @Keyword(Keywords.APPLY)
@@ -74,8 +75,8 @@ class ApplyOperation {
 		String cmd = buildScriptCmd(scriptPath, script)
 		Map imageContext = this.executionContext.variables["imageContext"]
 		Map containerConfig = HelperFunctions.buildContainerConfig(this.executionContext)
-		containerConfig << [Cmd: HelperFunctions.buildShellCommand(this.executionContext, cmd)]
-		
+		containerConfig << [Cmd: new DefaultShell(this.executionContext).buildShellCmd(cmd)]
+
 		def runResponse = dockerApi.run(containerConfig.Image, containerConfig)
 		Map commitQuery = HelperFunctions.buildCommitQuery(this.executionContext)
 		imageContext.currentImageId = dockerApi.commit(runResponse.containerId, commitQuery, true).imageId
