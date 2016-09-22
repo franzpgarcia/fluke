@@ -3,8 +3,9 @@ package fluke.script
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
-import fluke.common.FlukeEnvironmentVariable;
-import fluke.operation.BuildOperation;
+import fluke.core.common.FlukeEnvironmentVariable;
+import fluke.core.execution.ExecutionContext;
+import fluke.docker.operation.BuildOperation;
 
 class ScriptRunner {
 	def printErr = System.err.&println
@@ -16,7 +17,7 @@ class ScriptRunner {
 		String scriptName = "FlukeScript" + Math.abs(new Random().nextInt());
 		try {
 			DelegatingScript script = (DelegatingScript) this.parseScript(scriptStr, scriptName, args)
-			ScriptExecution scriptExecution = new ScriptExecution(outer: this)
+			ScriptExecution scriptExecution = new ScriptExecution(outer: this, executionContext: [procedures:[:], images:[:]] as ExecutionContext)
 			scriptExecution.addToContext("force", force)
 			if(build) {
 				scriptExecution.disableBuilds()
